@@ -1,0 +1,33 @@
+export const adminPath = {
+  signin: "signin",
+  meeting: "meeting",
+  feedback: "feedback",
+  settings: "settings",
+  dashboard: "dashboard",
+  devManage: "dev-manage",
+  userManage: "user-manage",
+  courseManage: "course-manage",
+  bannerManage: "banner-manage",
+  serviceManage: "service-manage",
+  projectManage: "project-manage",
+};
+
+export const userPath = {
+  home: "/",
+  login: "/login",
+  about: "/about",
+  course: "/course",
+  devhub: "/devhub",
+  service: "/service",
+  contact: "/contact",
+  library: "/library",
+  profile: "/profile",
+  discover: "/discover",
+  register: "/register",
+  messages: "/messages",
+  resetOTP: "/reset-otp",
+  registerOTP: "/register-otp",
+  courseDetail: "/course-detail",
+  resetPassword: "/reset-password",
+  forgotPassword: "/forgot-password",
+};
