@@ -4,6 +4,7 @@ import LazyLoader from "../../components/user/LazyLoader";
 import CourseCard from "../../components/user/CourseCard";
 import UserLayout from "../../components/layout/UserLayout";
 import ProjectCard from "../../components/user/ProjectCard";
+import { HoverCard } from "../../components/design/HoverCard";
 
 function Home() {
   const fadeIn = {
@@ -20,6 +21,7 @@ function Home() {
         transition={{ duration: 0.5 }}
       >
         <Banner />
+        <HoverCard />
         <CourseCard />
         <LazyLoader>
           <ProjectCard />
