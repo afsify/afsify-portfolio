@@ -1,4 +1,4 @@
-import { CardBody, CardContainer, CardItem } from "../design/CardSetting";
+import { CardBody, CardContainer, CardItem } from "./CardSetup";
 
 export function HoverCard() {
   return (

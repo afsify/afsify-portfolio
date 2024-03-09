@@ -5,6 +5,8 @@ import CourseCard from "../../components/user/CourseCard";
 import UserLayout from "../../components/layout/UserLayout";
 import ProjectCard from "../../components/user/ProjectCard";
 import { HoverCard } from "../../components/design/HoverCard";
+import { FloatNav } from "../../components/design/FloatNav";
+import { ParallaxSetup } from "../../components/design/ParallaxSetup";
 
 function Home() {
   const fadeIn = {
@@ -20,6 +22,8 @@ function Home() {
         animate="visible"
         transition={{ duration: 0.5 }}
       >
+        <FloatNav />
+        <ParallaxSetup />
         <Banner />
         <HoverCard />
         <CourseCard />
