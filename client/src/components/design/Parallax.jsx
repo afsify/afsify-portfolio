@@ -3,10 +3,10 @@ import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 
-export const ParallaxSetup = ({ products }) => {
-  const firstRow = products.slice(0, 5);
-  const secondRow = products.slice(5, 10);
-  const thirdRow = products.slice(10, 15);
+export const Parallax = ({ projects }) => {
+  const firstRow = projects.slice(0, 4);
+  const secondRow = projects.slice(4, 8);
+  const thirdRow = projects.slice(8, 12);
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
@@ -52,32 +52,31 @@ export const ParallaxSetup = ({ products }) => {
           translateY,
           opacity,
         }}
-        className=""
       >
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-20 mb-20">
-          {firstRow.map((product) => (
-            <ProductCard
-              product={product}
+          {firstRow.map((project) => (
+            <ProjectCard
+              project={project}
               translate={translateX}
-              key={product.title}
+              key={project.title}
             />
           ))}
         </motion.div>
         <motion.div className="flex flex-row  mb-20 space-x-20 ">
-          {secondRow.map((product) => (
-            <ProductCard
-              product={product}
+          {secondRow.map((project) => (
+            <ProjectCard
+              project={project}
               translate={translateXReverse}
-              key={product.title}
+              key={project.title}
             />
           ))}
         </motion.div>
         <motion.div className="flex flex-row-reverse space-x-reverse space-x-20">
-          {thirdRow.map((product) => (
-            <ProductCard
-              product={product}
+          {thirdRow.map((project) => (
+            <ProjectCard
+              project={project}
               translate={translateX}
-              key={product.title}
+              key={project.title}
             />
           ))}
         </motion.div>
@@ -86,12 +85,12 @@ export const ParallaxSetup = ({ products }) => {
   );
 };
 
-ParallaxSetup.propTypes = {
-  products: PropTypes.arrayOf(
+Parallax.propTypes = {
+  projects: PropTypes.arrayOf(
     PropTypes.shape({
       title: PropTypes.string.isRequired,
-      link: PropTypes.string.isRequired,
-      thumbnail: PropTypes.string.isRequired,
+      live: PropTypes.string.isRequired,
+      image: PropTypes.string.isRequired,
     })
   ).isRequired,
 };
@@ -111,7 +110,7 @@ export const Header = () => {
   );
 };
 
-export const ProductCard = ({ product, translate }) => {
+export const ProjectCard = ({ project, translate }) => {
   return (
     <motion.div
       style={{
@@ -120,34 +119,32 @@ export const ProductCard = ({ product, translate }) => {
       whileHover={{
         y: -20,
       }}
-      key={product.title}
-      className="group/product h-96 w-[30rem] relative flex-shrink-0"
+      key={project.title}
+      className="group/project h-64 w-[30rem] relative flex-shrink-0"
     >
       <Link
-        href={product.link}
-        className="block group-hover/product:shadow-2xl "
+        href={project.live}
+        className="block group-hover/project:shadow-2xl "
       >
         <img
-          src={product.thumbnail}
-          height="600"
-          width="600"
-          className="object-cover object-left-top absolute h-full w-full inset-0"
-          alt={product.title}
+          src={project.image}
+          className="object-cover object-center absolute w-full h-64 inset-0"
+          alt={project.title}
         />
       </Link>
-      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/product:opacity-80 bg-black pointer-events-none"></div>
-      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/product:opacity-100 text-white">
-        {product.title}
+      <div className="absolute inset-0 h-full w-full opacity-0 group-hover/project:opacity-80 bg-black pointer-events-none"></div>
+      <h2 className="absolute bottom-4 left-4 opacity-0 group-hover/project:opacity-100 text-white">
+        {project.title}
       </h2>
     </motion.div>
   );
 };
 
-ProductCard.propTypes = {
-  product: PropTypes.shape({
+ProjectCard.propTypes = {
+  project: PropTypes.shape({
     title: PropTypes.string.isRequired,
-    link: PropTypes.string.isRequired,
-    thumbnail: PropTypes.string.isRequired,
+    live: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
   }).isRequired,
   translate: PropTypes.object.isRequired,
 };

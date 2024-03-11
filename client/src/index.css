@@ -11,8 +11,12 @@
   }
 }
 
+body {
+  background: #121212;
+}
+
 .ant-btn {
-  background-color: #081a51;
+  background-color: #1b0b10;
 }
 
 * {

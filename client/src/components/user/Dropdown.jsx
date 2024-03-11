@@ -1,15 +1,13 @@
 import PropTypes from "prop-types";
-import Switcher from "../constant/Switcher";
 import { Dropdown as AntDropdown } from "antd";
 import { userPath } from "../../routes/routeConfig";
 import { userActions } from "../../utils/userSlice";
 import { useState, useEffect, Fragment } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import VerifiedIcon from "@mui/icons-material/Verified";
 import imageLinks from "../../assets/images/imageLinks";
 import { useLocation, useNavigate } from "react-router-dom";
 import TokenRoundedIcon from "@mui/icons-material/TokenRounded";
-import { selectIsDarkTheme, toggleTheme } from "../../utils/themeSlice";
 import {
   UserOutlined,
   HomeOutlined,
@@ -21,7 +19,6 @@ function Dropdown() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [userData, setUserData] = useState(null);
-  const isDarkTheme = useSelector(selectIsDarkTheme);
   const logged = localStorage.getItem("userToken") !== null;
 
   useEffect(() => {
@@ -33,10 +30,6 @@ function Dropdown() {
       }
     }
   }, [logged]);
-
-  const handleChange = () => {
-    dispatch(toggleTheme());
-  };
 
   const items = [
     {
@@ -65,9 +58,6 @@ function Dropdown() {
               {userData?.email}
             </span>
           </h3>
-          <div className="flex justify-center mt-2">
-            <Switcher isDarkTheme={isDarkTheme} handleChange={handleChange} />
-          </div>
           <ul className="mt-2 space-y-2">
             <DropdownItem
               text="Home"

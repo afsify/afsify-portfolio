@@ -1,11 +1,9 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import Switcher from "../constant/Switcher";
+import { useDispatch } from "react-redux";
 import { adminPath } from "../../routes/routeConfig";
 import { adminActions } from "../../utils/adminSlice";
-import { useDispatch, useSelector } from "react-redux";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { selectIsDarkTheme, toggleTheme } from "../../utils/themeSlice";
 import {
   MenuOutlined,
   TeamOutlined,
@@ -28,7 +26,6 @@ function AdminLayout({ children }) {
   const dispatch = useDispatch();
   const [nav, setNav] = useState(false);
   const [open, setOpen] = useState(true);
-  const isDarkTheme = useSelector(selectIsDarkTheme);
 
   const adminMenu = [
     {
@@ -87,10 +84,6 @@ function AdminLayout({ children }) {
     },
   ];
 
-  const handleChange = () => {
-    dispatch(toggleTheme());
-  };
-
   return (
     <div className="container mx-auto flex">
       <aside className="h-screen px-2 hidden md:flex">
@@ -99,9 +92,6 @@ function AdminLayout({ children }) {
             open ? "w-72" : "w-20 "
           } bg-dark-purple my-2 rounded-xl p-5 pt-8 relative shadow-black shadow-md duration-300`}
         >
-          <div className="absolute left-4 top-4">
-            <Switcher isDarkTheme={isDarkTheme} handleChange={handleChange} />
-          </div>
           <LeftCircleFilled
             style={{ fontSize: "35px", color: "#081A51" }}
             className={`absolute bg-white hover:scale-105 transition-transform cursor-pointer -right-4 top-12
@@ -158,12 +148,11 @@ function AdminLayout({ children }) {
           </ul>
         </div>
       </aside>
-      <main className="w-full p-2 overflow-y-auto h-screen mb-20 md:mb-0">{children}</main>
+      <main className="w-full p-2 overflow-y-auto h-screen mb-20 md:mb-0">
+        {children}
+      </main>
       {nav && (
         <div className="flex top-0 bottom-0 left-0 w-full p-3 fixed z-40">
-          <div className="fixed right-8 top-8">
-            <Switcher isDarkTheme={isDarkTheme} handleChange={handleChange} />
-          </div>
           <ul className="flex flex-col justify-center items-center rounded-xl w-full shadow-black shadow-md bg-dark-purple ">
             {adminMenu.map((menu) => {
               const isActive = location.pathname === menu.path;

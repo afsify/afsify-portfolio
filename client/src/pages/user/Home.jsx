@@ -1,14 +1,30 @@
 import { motion } from "framer-motion";
-import Banner from "../../components/user/Banner";
+import { useEffect, useState } from "react";
 import LazyLoader from "../../components/user/LazyLoader";
-import CourseCard from "../../components/user/CourseCard";
 import UserLayout from "../../components/layout/UserLayout";
 import ProjectCard from "../../components/user/ProjectCard";
+import { Parallax } from "../../components/design/Parallax";
+import { listProject } from "../../api/services/userService";
 import { HoverCard } from "../../components/design/HoverCard";
-import { FloatNav } from "../../components/design/FloatNav";
-import { ParallaxSetup } from "../../components/design/ParallaxSetup";
 
 function Home() {
+  const [projectData, setProjectData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await listProject();
+        const data = response.data.data;
+        setProjectData(data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setProjectData([]);
+        fetchData();
+      }
+    };
+    fetchData();
+  }, []);
+
   const fadeIn = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
@@ -22,11 +38,8 @@ function Home() {
         animate="visible"
         transition={{ duration: 0.5 }}
       >
-        <FloatNav />
-        <ParallaxSetup />
-        <Banner />
+        <Parallax projects={projectData} />
         <HoverCard />
-        <CourseCard />
         <LazyLoader>
           <ProjectCard />
         </LazyLoader>

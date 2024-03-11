@@ -1,5 +1,5 @@
-import jwt_decode from "jwt-decode";
 import toast from "react-hot-toast";
+import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import { Button, Form, Input } from "antd";
 import { GoogleLogin } from "@react-oauth/google";
@@ -35,7 +35,7 @@ function Signin() {
   };
 
   const responseMessage = (response) => {
-    let credential = jwt_decode(response.credential);
+    let credential = jwtDecode(response.credential);
     const values = {
       name: credential.name,
       email: credential.email,
