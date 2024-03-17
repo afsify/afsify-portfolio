@@ -10,6 +10,7 @@ import {
   WhatsAppOutlined,
   InstagramOutlined,
 } from "@ant-design/icons";
+import imageLinks from "../../assets/images/imageLinks";
 
 function Footer() {
   const [adminData, setAdminData] = useState({});
@@ -50,7 +51,13 @@ function Footer() {
         <div className="flex flex-col md:flex-row md:justify-between items-center">
           <div className="flex justify-center md:justify-start w-full mb-4 md:mb-0">
             <Link to={userPath.home}>
-              <h1 className="text-5xl font-signature">Codeverse</h1>
+              <div className="flex items-center gap-x-2">
+                
+              <div className="overflow-hidden rounded-full w-9 h-9 mx-auto shadow-md shadow-black ">
+                <img src={imageLinks?.logo} alt="Logo" />
+              </div>
+              <h1 className="text-4xl font-signature">AFSIFY</h1>
+              </div>
             </Link>
           </div>
           <div className="flex justify-between w-full">
@@ -124,9 +131,9 @@ function Footer() {
         </div>
         <div className="w-full mt-8 border-t border-gray-600"></div>
         <div className="flex flex-col md:flex-row justify-between items-center mt-4">
-          <div className="text-sm mb-4 md:mb-0 md:mr-4">
-            &copy; {new Date().getFullYear()} Codeverse DevLearn <br /> All
-            rights reserved
+          <div className="text-sm mb-4 font-mono md:mb-0 md:mr-4">
+            &copy;{new Date().getFullYear()} AFSIFY <br /> All
+            Rights Reserved
           </div>
           <motion.div
             variants={iconVariants}

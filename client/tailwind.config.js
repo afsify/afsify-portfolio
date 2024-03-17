@@ -4,7 +4,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        signature: ["Great Vibes"],
+        signature: ["Montserrat Subrayada"],
       },
       colors: {
         "light-gray": "#1f1f1f",

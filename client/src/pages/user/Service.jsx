@@ -1,9 +1,10 @@
 import { motion } from "framer-motion";
+import { Input, Typography } from "antd";
 import { useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Input, Card, Typography } from "antd";
 import UserLayout from "../../components/layout/UserLayout";
+import CardEffect from "../../components/design/CardEffect";
 import { listService } from "../../api/services/userService";
 import { hideLoading, showLoading } from "../../utils/alertSlice";
 import { SearchOutlined, CloseCircleOutlined } from "@ant-design/icons";
@@ -71,13 +72,13 @@ function Service() {
             className="rounded-md py-2 w-44"
             prefix={
               <SearchOutlined
-                style={{ color: "#1890ff", marginRight: "5px" }}
+                style={{ color: "#b28a73", marginRight: "5px" }}
               />
             }
             suffix={
               searchInput && (
                 <CloseCircleOutlined
-                  style={{ color: "#1890ff", cursor: "pointer" }}
+                  style={{ color: "#b28a73", cursor: "pointer" }}
                   onClick={clearSearchInput}
                 />
               )
@@ -85,7 +86,7 @@ function Service() {
           />
         </div>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 px-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5 px-5">
         {filteredServices.map((service, index) => (
           <motion.div
             key={service._id}
@@ -97,21 +98,7 @@ function Service() {
             transition={{ duration: 0.05, delay: index * 0.05 }}
             className="col-span-1 transform rounded-lg transition duration-300 ease-in-out"
           >
-            <motion.div>
-              <Card
-                cover={
-                  <img
-                    alt={service.title}
-                    src={service.image}
-                    className="w-full h-40 object-cover rounded-t-lg"
-                  />
-                }
-                className=" shadow-md hover:scale-105 hover:shadow-xl duration-300 overflow-hidden rounded-lg cursor-pointer"
-              >
-                <h3 className="text-lg font-semibold mb-2">{service.title}</h3>
-                <p className="text-gray-500">{service.description}</p>
-              </Card>
-            </motion.div>
+            <CardEffect data={service} />
           </motion.div>
         ))}
       </div>

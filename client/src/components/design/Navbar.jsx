@@ -61,7 +61,9 @@ export const Navbar = ({ navItems, className }) => {
               )}
             >
               <span
-                className={`${isActive && "text-light-cream font-semibold"} block sm:hidden`}
+                className={`${
+                  isActive && "text-light-cream font-semibold"
+                } block sm:hidden`}
               >
                 {navItem.icon}
               </span>

@@ -11,9 +11,7 @@ const Meeting = lazy(() => import("../pages/admin/Meeting"));
 const Feedback = lazy(() => import("../pages/admin/Feedback"));
 const Settings = lazy(() => import("../pages/admin/Settings"));
 const Dashboard = lazy(() => import("../pages/admin/Dashboard"));
-const DevManage = lazy(() => import("../pages/admin/DevManage"));
 const UserManage = lazy(() => import("../pages/admin/UserManage"));
-const CourseManage = lazy(() => import("../pages/admin/CourseManage"));
 const BannerManage = lazy(() => import("../pages/admin/BannerManage"));
 const ServiceManage = lazy(() => import("../pages/admin/ServiceManage"));
 const ProjectManage = lazy(() => import("../pages/admin/ProjectManage"));
@@ -39,9 +37,7 @@ function AdminRoute() {
         <Route path={adminPath.feedback} element={<Feedback />} />
         <Route path={adminPath.settings} element={<Settings />} />
         <Route path={adminPath.dashboard} element={<Dashboard />} />
-        <Route path={adminPath.devManage} element={<DevManage />} />
         <Route path={adminPath.userManage} element={<UserManage />} />
-        <Route path={adminPath.courseManage} element={<CourseManage />} />
         <Route path={adminPath.bannerManage} element={<BannerManage />} />
         <Route path={adminPath.serviceManage} element={<ServiceManage />} />
         <Route path={adminPath.projectManage} element={<ProjectManage />} />

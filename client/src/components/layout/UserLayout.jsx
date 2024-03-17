@@ -61,7 +61,7 @@ const UserLayout = ({ children }) => {
   return (
     <div className="min-h-screen">
       <Navbar navItems={userMenu} />
-      <main className="container mx-auto mt-20 px-2 mb-5 min-h-[85vh]">
+      <main className="container mx-auto mt-4 px-2 mb-5 min-h-[85vh]">
         {children}
       </main>
       <Footer />

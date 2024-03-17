@@ -15,7 +15,7 @@ function DefaultWindow({ skeleton }) {
                 <img src={imageLinks.logo} alt="Logo" />
               )}
             </div>
-            <h1 className="text-2xl mt-2">Welcome to Codeverse</h1>
+            <h1 className="text-3xl mt-2">Welcome to Afsify</h1>
             <h1 className="text-sm text-center mt-1">Please select a chat</h1>
           </div>
         </div>

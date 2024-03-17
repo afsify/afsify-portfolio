@@ -11,13 +11,11 @@ import {
   CloseOutlined,
   LaptopOutlined,
   GithubOutlined,
-  YoutubeOutlined,
   SettingOutlined,
   MessageOutlined,
   BarChartOutlined,
   LeftCircleFilled,
   PoweroffOutlined,
-  CodeSandboxOutlined,
 } from "@ant-design/icons";
 
 function AdminLayout({ children }) {
@@ -60,27 +58,15 @@ function AdminLayout({ children }) {
     },
     {
       id: 6,
-      title: "Courses",
-      icon: <YoutubeOutlined />,
-      path: `/admin/${adminPath.courseManage}`,
-    },
-    {
-      id: 7,
       title: "Settings",
       icon: <SettingOutlined />,
       path: `/admin/${adminPath.settings}`,
     },
     {
-      id: 8,
+      id: 7,
       title: "Users",
       icon: <TeamOutlined />,
       path: `/admin/${adminPath.userManage}`,
-    },
-    {
-      id: 9,
-      title: "Devs",
-      icon: <CodeSandboxOutlined />,
-      path: `/admin/${adminPath.devManage}`,
     },
   ];
 
@@ -93,18 +79,18 @@ function AdminLayout({ children }) {
           } bg-dark-purple my-2 rounded-xl p-5 pt-8 relative shadow-black shadow-md duration-300`}
         >
           <LeftCircleFilled
-            style={{ fontSize: "35px", color: "#081A51" }}
+            style={{ fontSize: "35px", color: "#1b0b10" }}
             className={`absolute bg-white hover:scale-105 transition-transform cursor-pointer -right-4 top-12
            border-2 rounded-full ${!open && "rotate-180"}`}
             onClick={() => setOpen(!open)}
           />
-          <div className="mt-3">
+          <div className="my-3">
             <h1
-              className={`text-white text-5xl font-signature text-center duration-500 ${
+              className={`text-white text-4xl font-signature text-center duration-500 ${
                 !open && "rotate-[360deg] scale-0"
               }`}
             >
-              Codeverse
+              AFSIFY
             </h1>
           </div>
           <ul>

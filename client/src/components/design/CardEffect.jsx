@@ -4,6 +4,47 @@ import { createContext, useState, useContext, useRef, useEffect } from "react";
 
 const MouseEnterContext = createContext(undefined);
 
+function CardEffect({ data }) {
+  return (
+    <CardContainer className="inter-var">
+      <CardBody className="bg-gray-50 relative group/card  dark:hover:shadow-2xl dark:hover:shadow-emerald-500/[0.1] dark:bg-black dark:border-white/[0.2] border-black/[0.1] w-auto sm:w-[30rem] h-auto rounded-xl p-6 border  ">
+        <CardItem
+          translateZ="50"
+          className="text-xl font-bold text-neutral-600 dark:text-white"
+        >
+          {data.title}
+        </CardItem>
+        <CardItem translateZ="100" className="w-full mt-4">
+          <img
+            src={data.image}
+            height="1000"
+            width="1000"
+            className="h-60 w-full object-cover rounded-xl group-hover/card:shadow-xl"
+            alt="thumbnail"
+          />
+        </CardItem>
+        <CardItem
+          as="p"
+          translateZ="60"
+          className="text-neutral-500 text-sm max-w-sm mt-4 dark:text-neutral-300"
+        >
+          {data.description}
+        </CardItem>
+      </CardBody>
+    </CardContainer>
+  );
+}
+
+CardEffect.propTypes = {
+  data: PropTypes.shape({
+    title: PropTypes.string.isRequired,
+    image: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
+  }).isRequired,
+};
+
+export default CardEffect;
+
 export const CardContainer = ({ children, className, containerClassName }) => {
   const containerRef = useRef(null);
   const [isMouseEntered, setIsMouseEntered] = useState(false);
@@ -31,7 +72,7 @@ export const CardContainer = ({ children, className, containerClassName }) => {
     <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
       <div
         className={cn(
-          "py-20 flex items-center justify-center",
+          "flex items-center justify-center",
           containerClassName
         )}
         style={{
@@ -68,7 +109,7 @@ export const CardBody = ({ children, className }) => {
   return (
     <div
       className={cn(
-        "h-96 w-96 [transform-style:preserve-3d]  [&>*]:[transform-style:preserve-3d]",
+        "h-96 w-96 [transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]",
         className
       )}
     >
