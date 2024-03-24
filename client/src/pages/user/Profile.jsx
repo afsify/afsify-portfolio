@@ -6,12 +6,10 @@ import { useDispatch } from "react-redux";
 import { cloudUpload } from "../../api/cloudinary";
 import { CameraOutlined } from "@ant-design/icons";
 import imageLinks from "../../assets/images/imageLinks";
-import VerifiedIcon from "@mui/icons-material/Verified";
 import { Form, Input, Button, Upload, Card } from "antd";
 import UserLayout from "../../components/layout/UserLayout";
-import TokenRoundedIcon from "@mui/icons-material/TokenRounded";
-import { hideLoading, showLoading } from "../../utils/alertSlice";
 import { updateProfile } from "../../api/services/userService";
+import { hideLoading, showLoading } from "../../utils/alertSlice";
 
 function Profile() {
   const dispatch = useDispatch();
@@ -153,23 +151,7 @@ function Profile() {
                 </Upload>
               </motion.div>
               <h2 className="mt-4 font-bold text-3xl">
-                <span>
-                  {userData?.name}
-                  {userData?.developer ? (
-                    <TokenRoundedIcon
-                      className="ml-1 mb-2"
-                      sx={{ fontSize: 24, color: "green" }}
-                    />
-                  ) : userData?.prime ? (
-                    <VerifiedIcon
-                      className="ml-1 mb-2"
-                      color="primary"
-                      sx={{ fontSize: 24 }}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </span>
+                <span>{userData?.name}</span>
               </h2>
               <p className="text-lg text-gray-300">{userData?.email}</p>
             </div>
