@@ -4,7 +4,6 @@ const nodemailer = require("nodemailer");
 const userModel = require("../../model/user.model");
 const adminModel = require("../../model/admin.model");
 const orderModel = require("../../model/order.model");
-const bannerModel = require("../../model/banner.model");
 const courseModel = require("../../model/course.model");
 const projectModel = require("../../model/project.model");
 const serviceModel = require("../../model/service.model");
@@ -275,22 +274,6 @@ const getUser = async (req, res, next) => {
   }
 };
 
-//! =============================================== List Banner ===============================================
-
-const listBanner = async (req, res, next) => {
-  try {
-    const banner = await bannerModel.find({ status: true });
-    res.status(200).send({
-      message: "Banners Fetched Successfully",
-      success: true,
-      data: banner,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Error Occurred" });
-    next(error);
-  }
-};
-
 //! =============================================== Top Course ===============================================
 
 const topCourse = async (req, res, next) => {
@@ -446,7 +429,6 @@ module.exports = {
   checkOTP,
   resetPassword,
   getUser,
-  listBanner,
   topCourse,
   listProject,
   listService,
