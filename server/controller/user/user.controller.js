@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const userModel = require("../../model/user.model");
 const adminModel = require("../../model/admin.model");
-const orderModel = require("../../model/order.model");
 const courseModel = require("../../model/course.model");
 const projectModel = require("../../model/project.model");
 const serviceModel = require("../../model/service.model");
@@ -274,36 +273,6 @@ const getUser = async (req, res, next) => {
   }
 };
 
-//! =============================================== Top Course ===============================================
-
-const topCourse = async (req, res, next) => {
-  try {
-    const coursePurchases = await orderModel.aggregate([
-      {
-        $group: {
-          _id: "$courseId",
-          totalPurchases: { $sum: 1 },
-        },
-      },
-      { $sort: { totalPurchases: -1 } },
-      { $limit: 4 },
-    ]);
-    const topCourseIds = coursePurchases.map((item) => item._id);
-    const topCourses = await courseModel.find({
-      _id: { $in: topCourseIds },
-      status: true,
-    });
-    res.status(200).send({
-      message: "Top Courses Fetched Successfully",
-      success: true,
-      data: topCourses,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Error Occurred" });
-    next(error);
-  }
-};
-
 //! =============================================== List Project ===============================================
 
 const listProject = async (req, res, next) => {
@@ -429,7 +398,6 @@ module.exports = {
   checkOTP,
   resetPassword,
   getUser,
-  topCourse,
   listProject,
   listService,
   listCourse,
