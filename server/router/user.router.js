@@ -31,7 +31,6 @@ user_router.get("/list-service", userController.listService);
 
 //? ================================================ DevHub ================================================
 
-user_router.post("/create-dev", userAuth, devhubController.createDev);
 user_router.get("/list-dev", userAuth, devhubController.listDev);
 user_router.get("/discover-dev", devhubController.discoverDev);
 
