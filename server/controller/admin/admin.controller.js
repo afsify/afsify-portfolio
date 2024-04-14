@@ -2,8 +2,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const userModel = require("../../model/user.model");
 const adminModel = require("../../model/admin.model");
-const orderModel = require("../../model/order.model");
-const courseModel = require("../../model/course.model");
 const contactModel = require("../../model/contact.model");
 const projectModel = require("../../model/project.model");
 
@@ -73,32 +71,13 @@ const getAdmin = async (req, res, next) => {
 
 const listDashboard = async (req, res, next) => {
   try {
-    const orders = await orderModel
-      .find()
-      .populate({ path: "user", select: "name image" })
-      .exec();
-    const orderCount = await orderModel.countDocuments();
-    const courseCount = await courseModel.countDocuments();
     const contactCount = await contactModel.countDocuments();
     const projectCount = await projectModel.countDocuments();
-    const totalMembersCount = await userModel.countDocuments();
-    const primeMembersCount = await userModel.countDocuments({ prime: true });
     const normalUsersCount = await userModel.countDocuments({ prime: false });
-    const courseProfit = orders.reduce((acc, order) => acc + order.price, 0);
-    const primeProfit = primeMembersCount * 399;
-    const totalProfit = courseProfit + primeProfit;
     const data = {
-      orders,
-      orderCount,
-      courseCount,
       contactCount,
       projectCount,
-      totalMembersCount,
-      primeMembersCount,
       normalUsersCount,
-      courseProfit,
-      primeProfit,
-      totalProfit,
     };
     res.status(200).json({
       message: "Dashboard Fetched",

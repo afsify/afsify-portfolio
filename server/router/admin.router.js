@@ -3,8 +3,6 @@ const admin_router = express.Router();
 const { adminAuth } = require("../middleware/auth");
 const adminController = require("../controller/admin/admin.controller");
 const developerController = require("../controller/admin/developer.controller");
-const bannerController = require("../controller/admin/banner.controller");
-const courseController = require("../controller/admin/course.controller");
 const projectController = require("../controller/admin/project.controller");
 const serviceController = require("../controller/admin/service.controller");
 
@@ -30,14 +28,6 @@ admin_router.post("/accept-dev/:devId", adminAuth, developerController.acceptDev
 admin_router.post("/reject-dev/:devId", adminAuth, developerController.rejectDev);
 admin_router.post("/remove-dev/:devId", adminAuth, developerController.removeDev);
 
-//? ============================================= Banner Manage =============================================
-
-admin_router.get("/list-banner", adminAuth, bannerController.listBanner);
-admin_router.post("/insert-banner", adminAuth, bannerController.insertBanner);
-admin_router.post("/edit-banner/:bannerId", adminAuth, bannerController.editBanner);
-admin_router.post("/banner-status/:bannerId", adminAuth, bannerController.bannerStatus);
-admin_router.delete("/delete-banner/:bannerId", adminAuth, bannerController.deleteBanner);
-
 //? ============================================= Service Manage =============================================
 
 admin_router.get("/list-service", adminAuth, serviceController.listService);
@@ -53,14 +43,6 @@ admin_router.post("/insert-project", adminAuth, projectController.insertProject)
 admin_router.post("/edit-project/:projectId", adminAuth, projectController.editProject);
 admin_router.post("/project-status/:projectId", adminAuth, projectController.projectStatus);
 admin_router.delete("/delete-project/:projectId", adminAuth, projectController.deleteProject);
-
-//? ============================================= Course Manage =============================================
-
-admin_router.get("/list-course", adminAuth, courseController.listCourse);
-admin_router.post("/insert-course", adminAuth, courseController.insertCourse);
-admin_router.post("/edit-course/:courseId", adminAuth, courseController.editCourse);
-admin_router.post("/course-status/:courseId", adminAuth, courseController.courseStatus);
-admin_router.delete("/delete-course/:courseId", adminAuth, courseController.deleteCourse);
 
 //? ================================================ Feedback ================================================
 

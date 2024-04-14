@@ -3,7 +3,6 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const userModel = require("../../model/user.model");
 const adminModel = require("../../model/admin.model");
-const courseModel = require("../../model/course.model");
 const projectModel = require("../../model/project.model");
 const serviceModel = require("../../model/service.model");
 const contactModel = require("../../model/contact.model");
@@ -305,49 +304,6 @@ const listService = async (req, res, next) => {
   }
 };
 
-//! ============================================== List Course ==============================================
-
-const listCourse = async (req, res, next) => {
-  try {
-    const courses = await courseModel.find({ status: true });
-    res.status(200).send({
-      message: "Courses Fetched Successfully",
-      success: true,
-      data: courses,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Error Occurred" });
-    next(error);
-  }
-};
-
-//! ============================================== Get Course ==============================================
-
-const getCourse = async (req, res, next) => {
-  try {
-    const { courseId } = req.params;
-    const course = await courseModel.findById(courseId);
-    if (!course) {
-      return res.status(404).json({
-        success: false,
-        message: "Course not found",
-      });
-    }
-    const videos = course.videos || [];
-    res.status(200).json({
-      success: true,
-      message: "Course Fetched Successfully",
-      data: {
-        ...course.toObject(),
-        count: videos.length,
-      },
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Error Occurred" });
-    next(error);
-  }
-};
-
 //! ============================================= Contact Message =============================================
 
 const contactMessage = async (req, res, next) => {
@@ -400,8 +356,6 @@ module.exports = {
   getUser,
   listProject,
   listService,
-  listCourse,
-  getCourse,
   contactMessage,
   getAbout,
 };

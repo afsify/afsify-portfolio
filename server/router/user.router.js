@@ -3,8 +3,6 @@ const user_router = express.Router();
 const { userAuth } = require("../middleware/auth");
 const userController = require("../controller/user/user.controller");
 const chatController = require("../controller/user/chat.controller");
-const orderController = require("../controller/user/order.controller");
-const devhubController = require("../controller/user/devhub.controller");
 const accountController = require("../controller/user/account.controller");
 const messageController = require("../controller/user/message.controller");
 
@@ -29,16 +27,6 @@ user_router.get("/list-project", userController.listProject);
 
 user_router.get("/list-service", userController.listService);
 
-//? ================================================ DevHub ================================================
-
-user_router.get("/list-dev", userAuth, devhubController.listDev);
-user_router.get("/discover-dev", devhubController.discoverDev);
-
-//? ================================================ Course ================================================
-
-user_router.get("/list-course", userController.listCourse);
-user_router.get("/list-course/:courseId", userController.getCourse);
-
 //? ================================================ Contact ================================================
 
 user_router.post("/contact-message", userController.contactMessage);
@@ -46,12 +34,6 @@ user_router.post("/contact-message", userController.contactMessage);
 //? ================================================= About =================================================
 
 user_router.get("/get-about", userController.getAbout);
-
-//? ================================================ Order ================================================
-
-user_router.post("/create-order", userAuth, orderController.createOrder);
-user_router.get("/list-order", userAuth, orderController.listOrder);
-user_router.post("/prime-payment", userAuth, orderController.primePayment);
 
 //? ================================================ Profile ================================================
 
