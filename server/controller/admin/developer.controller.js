@@ -1,24 +1,6 @@
 const developerModel = require("../../model/developer.model");
 const userModel = require("../../model/user.model");
 
-//! ============================================ Developer Request ============================================
-
-const devRequest = async (req, res, next) => {
-  try {
-    const devData = await developerModel
-      .find()
-      .populate("user", ["name", "email", "developer", "image"]);
-    res.status(200).send({
-      message: "DevData Fetched Successfully",
-      success: true,
-      data: devData,
-    });
-  } catch (error) {
-    res.status(500).json({ success: false, message: "Error Occurred" });
-    next(error);
-  }
-};
-
 //! ============================================ Accept Request ============================================
 
 const acceptDev = async (req, res, next) => {
@@ -108,7 +90,6 @@ const removeDev = async (req, res, next) => {
 };
 
 module.exports = {
-  devRequest,
   acceptDev,
   rejectDev,
   removeDev,

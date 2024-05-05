@@ -23,7 +23,6 @@ admin_router.post("/unblock-user/:userId", adminAuth, adminController.unblockUse
 
 //? ============================================== Dev Manage ==============================================
 
-admin_router.get("/dev-request", adminAuth, developerController.devRequest);
 admin_router.post("/accept-dev/:devId", adminAuth, developerController.acceptDev);
 admin_router.post("/reject-dev/:devId", adminAuth, developerController.rejectDev);
 admin_router.post("/remove-dev/:devId", adminAuth, developerController.removeDev);
