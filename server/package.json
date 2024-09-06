@@ -9,7 +9,7 @@
     "server": "pm2 start index.js"
   },
   "keywords": [],
-  "author": "afsal",
+  "author": "afsify",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^5.1.1",
@@ -21,6 +21,7 @@
     "mongoose": "^8.2.1",
     "nodemailer": "^6.9.11",
     "pm2": "^5.3.1",
+    "server": "file:",
     "socket.io": "^4.7.4",
     "stripe": "^14.19.0"
   },
