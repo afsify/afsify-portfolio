@@ -1,0 +1,8 @@
+import { Container, PageHero } from "@/components/ui/primitives";
+import { ProjectExplorer } from "@/components/projects/ProjectExplorer";
+import { ContactCTA } from "@/components/sections/ContactCTA";
+import { pageMetadata } from "@/lib/metadata";
+export const metadata = pageMetadata("Projects", "Explore EkaVio, Codisify Devlearn, Chateph Messenger, Afssian E-Commerce and Taskent Dashboard by Muhammed Afsal.", "/projects");
+export default function Projects() {
+  return <><PageHero label="Selected projects / 06" title="Ideas, carried into code." description="Independent work across business operations, learning, realtime communication and commerce. Each project explores a different part of the stack." /><section className="section light-section projects-section"><Container><ProjectExplorer /></Container></section><ContactCTA /></>;
+}

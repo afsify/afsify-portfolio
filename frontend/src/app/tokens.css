@@ -1,0 +1,149 @@
+/* AFSIFY color roles. Layout rules consume these tokens, never brand hex values. */
+:root {
+  color-scheme: dark;
+  --bg: #111315;
+  --surface: #171a1d;
+  --surface-raised: #1e2225;
+  --surface-contrast: #f4f4f1;
+  --text: #f4f4f1;
+  --text-muted: #a7acb0;
+  --text-soft: #c4c8cb;
+  --border: #33383d;
+  --border-strong: #4a5055;
+  --accent: #d2d6da;
+  --accent-hover: #f0f1f2;
+  --accent-contrast: #111315;
+  --focus: #9aa9b3;
+  --selection-bg: #d2d6da;
+  --selection-text: #111315;
+  --hover-surface: #ffffff0a;
+  --header-bg: #111315fa;
+  --overlay: #00000099;
+
+  /* Editorial paper remains an intentional contrast in the dark theme. */
+  --editorial-bg: #f4f4f1;
+  --editorial-surface: #ffffff;
+  --editorial-raised: #edeeeb;
+  --editorial-text: #17191b;
+  --editorial-muted: #62686d;
+  --editorial-soft: #4d5459;
+  --editorial-border: #ced2d4;
+  --editorial-border-strong: #aeb4b8;
+  --editorial-accent: #5e676e;
+  --editorial-accent-hover: #262b2f;
+  --editorial-accent-contrast: #ffffff;
+  --editorial-focus: #526977;
+  --editorial-hover: #17191b08;
+  --recognition-bg: #e5e7e6;
+  --card-bg: #edeeeb;
+  --card-cool: #e7ebed;
+  --card-warm: #eeece7;
+  --card-neutral: #e8e9e8;
+  --symbol-bg: #dde1e3;
+
+  /* Always-dark feature panels anchor both themes. */
+  --feature-bg: #171a1d;
+  --feature-raised: #252b30;
+  --feature-text: #f4f4f1;
+  --feature-muted: #a7acb0;
+  --feature-soft: #c4c8cb;
+  --feature-border: #40474d;
+  --feature-border-strong: #677680;
+  --feature-accent: #d2d6da;
+  --feature-accent-hover: #f0f1f2;
+  --feature-accent-contrast: #111315;
+  --feature-focus: #9aa9b3;
+  --feature-hover: #ffffff0a;
+  --diagram-bg: #111315;
+  --diagram-emphasis: #313a41;
+  --photo-caption-bg: #111315ed;
+
+  --cta-bg: #d2d6da;
+  --cta-text: #17191b;
+  --cta-muted: #4d5459;
+  --cta-border: #737d84;
+  --cta-hover: #c4cbd0;
+  --cta-focus: #374c5a;
+  --print-bg: #ffffff;
+  --print-text: #17191b;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f4f4f1;
+  --surface: #ffffff;
+  --surface-raised: #edeeeb;
+  --surface-contrast: #171a1d;
+  --text: #17191b;
+  --text-muted: #62686d;
+  --text-soft: #4d5459;
+  --border: #ced2d4;
+  --border-strong: #aeb4b8;
+  --accent: #5e676e;
+  --accent-hover: #262b2f;
+  --accent-contrast: #ffffff;
+  --focus: #526977;
+  --selection-bg: #262b2f;
+  --selection-text: #ffffff;
+  --hover-surface: #17191b08;
+  --header-bg: #f4f4f1fa;
+  --editorial-bg: #edeeeb;
+  --editorial-raised: #e3e6e8;
+  --recognition-bg: #e3e6e8;
+  --card-bg: #ffffff;
+  --card-cool: #f0f3f4;
+  --card-warm: #f8f7f3;
+  --card-neutral: #f4f5f4;
+  --cta-bg: #171a1d;
+  --cta-text: #f4f4f1;
+  --cta-muted: #c4c8cb;
+  --cta-border: #677680;
+  --cta-hover: #252b30;
+  --cta-focus: #9aa9b3;
+}
+
+/* Scope foreground, border and interaction roles to their surrounding surface. */
+.light-section, .recognition-section {
+  color-scheme: light;
+  --bg: var(--editorial-bg);
+  --surface: var(--editorial-surface);
+  --surface-raised: var(--editorial-raised);
+  --text: var(--editorial-text);
+  --text-muted: var(--editorial-muted);
+  --text-soft: var(--editorial-soft);
+  --border: var(--editorial-border);
+  --border-strong: var(--editorial-border-strong);
+  --accent: var(--editorial-accent);
+  --accent-hover: var(--editorial-accent-hover);
+  --accent-contrast: var(--editorial-accent-contrast);
+  --focus: var(--editorial-focus);
+  --hover-surface: var(--editorial-hover);
+  --selection-bg: var(--editorial-accent-hover);
+  --selection-text: var(--editorial-accent-contrast);
+}
+.featured-project, .architecture, .site-footer, .photo-label {
+  color-scheme: dark;
+  --bg: var(--feature-bg);
+  --surface: var(--feature-bg);
+  --surface-raised: var(--feature-raised);
+  --text: var(--feature-text);
+  --text-muted: var(--feature-muted);
+  --text-soft: var(--feature-soft);
+  --border: var(--feature-border);
+  --border-strong: var(--feature-border-strong);
+  --accent: var(--feature-accent);
+  --accent-hover: var(--feature-accent-hover);
+  --accent-contrast: var(--feature-accent-contrast);
+  --focus: var(--feature-focus);
+  --hover-surface: var(--feature-hover);
+  --selection-bg: var(--feature-accent);
+  --selection-text: var(--feature-accent-contrast);
+}
+.contact-cta {
+  --text: var(--cta-text);
+  --text-muted: var(--cta-muted);
+  --text-soft: var(--cta-muted);
+  --border: var(--cta-border);
+  --border-strong: var(--cta-border);
+  --focus: var(--cta-focus);
+}

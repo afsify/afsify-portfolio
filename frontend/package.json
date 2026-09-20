@@ -1,0 +1,39 @@
+{
+  "name": "afsify-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint . --max-warnings=0",
+    "typecheck": "next typegen && tsc --noEmit",
+    "verify": "node scripts/verify.mjs",
+    "verify:browser": "node scripts/verify-browser.mjs",
+    "verify:images": "node scripts/verify-images.mjs",
+    "assets": "node scripts/prepare-assets.mjs"
+  },
+  "dependencies": {
+    "lucide-react": "1.47.0",
+    "next": "16.3.5",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.10.2",
+    "@fontsource-variable/manrope": "^5.2.8",
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^24",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.5",
+    "playwright": "^1.55.0",
+    "sharp": "^0.35.4",
+    "tailwindcss": "^4.1.0",
+    "typescript": "^5.9.0"
+  }
+}

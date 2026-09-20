@@ -1,0 +1,8 @@
+import { ArrowUpRight, Mail, MapPin } from "lucide-react";
+import { Container, Eyebrow, ExternalLink, ResumeButton } from "@/components/ui/primitives";
+import { profile } from "@/data/profile";
+import { pageMetadata } from "@/lib/metadata";
+export const metadata = pageMetadata("Contact", "Get in touch with Muhammed Afsal by email, LinkedIn or GitHub. Frontend Developer and Full Stack Web Developer based in Calicut, Kerala.", "/contact");
+export default function Contact() {
+  return <><section className="contact-hero"><Container><Eyebrow>Let’s connect</Eyebrow><h1>Good conversations.<br /><span>Better possibilities.</span></h1><p className="lead">A role, a project, or an interesting engineering problem.<br className="desktop-break" /> I’d like to hear what you have in mind.</p><a href={`mailto:${profile.email}`} className="contact-email"><span>{profile.email}</span><ArrowUpRight size={32} aria-hidden="true" /></a><p className="email-caption"><Mail size={15} aria-hidden="true" />Email is the best place to start.</p></Container></section><section className="section light-section"><Container><div className="contact-grid"><div><Eyebrow>Elsewhere on the internet</Eyebrow><h2>Find the work.<br />Meet the person.</h2><div className="contact-location"><MapPin size={19} aria-hidden="true" /><span>{profile.location}<small>India Standard Time · UTC +05:30</small></span></div><ResumeButton className="button button-dark" /></div><div className="contact-socials">{profile.socials.map((social) => <article key={social.label}><div><h3>{social.label}</h3><p>{social.description}</p></div><ExternalLink href={social.href} className="icon-button"><span className="sr-only">Visit {social.label}</span></ExternalLink></article>)}</div></div></Container></section></>;
+}
