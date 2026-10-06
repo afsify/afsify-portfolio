@@ -1,18 +1,27 @@
+const email = "afsify2000@gmail.com";
+const phoneE164 = "+916235448008";
 export const profile = {
   name: "Muhammed Afsal",
   brand: "afsify",
   role: "Frontend Developer @ Bizforz",
   secondaryRole: "Full Stack Web Developer",
+  headline: "Frontend Developer · React & TypeScript",
+  availability: "Open to Frontend / Full-Stack opportunities",
   location: "Calicut, Kerala, India",
-  email: "afsify2000@gmail.com",
-  siteUrl: process.env.NEXT_PUBLIC_SITE_URL || "https://afsify.vercel.app",
-  resume: "/documents/muhammed-afsal-resume.docx",
-  summary: "Frontend Developer with 1.5+ years of professional experience building production ERP, ticketing, hospitality, and institutional applications using React, TypeScript, Redux, and Tailwind CSS.",
-  introduction: "I build production web interfaces and full-stack systems that turn operational workflows into usable software.",
+  email,
+  phone: { display: "+91 6235448008", e164: phoneE164, href: `tel:${phoneE164}` },
+  whatsapp: `https://wa.me/${phoneE164.slice(1)}`,
+  hiringEmail: `mailto:${email}?subject=${encodeURIComponent("Frontend / Full-Stack opportunity")}`,
+  projectEmail: `mailto:${email}?subject=${encodeURIComponent("Freelance project enquiry")}`,
+  timezone: "India Standard Time · UTC +05:30",
+  siteUrl: (process.env.NEXT_PUBLIC_SITE_URL || "https://www.afsify.com").replace(/\/+$/, ""),
+  resume: { pdf: "/documents/muhammed-afsal-resume.pdf", docx: "/documents/muhammed-afsal-resume.docx" },
+  summary: "Frontend Developer with 1.5+ years of professional experience shipping React and TypeScript business applications across ERP, ticketing, hospitality and institutional workflows.",
+  introduction: "I build dependable React and TypeScript interfaces at Bizforz, with full-stack capability grounded in independent web applications.",
   narrative: [
     "I’m Muhammed Afsal, a frontend developer at Bizforz based in Calicut, Kerala. My work sits where interfaces meet real operations: attendance, payroll, institutional workflows and the everyday details people depend on.",
     "A diploma in Computer Engineering gave me my technical foundation. Project-based MERN training at Brototype took that foundation into end-to-end web development. At Bizforz, I’ve brought those skills into production software and learned directly from the teams and clients who use it.",
-    "Alongside my professional work, I’m building EkaVio, a multi-tenant operations platform. It’s where I’m taking a deeper look at the whole system: identity, authorization, data boundaries and the path from development to deployment.",
+    "Alongside my professional frontend work, I develop EkaVio, a multi-tenant operations platform built with React, TypeScript, Express and PostgreSQL. It brings together secure sessions, tenant boundaries and repeatable delivery practices in an independent full-stack project.",
   ],
   socials: [
     { label: "GitHub", href: "https://github.com/afsify", description: "Code, projects & engineering work" },
@@ -22,7 +31,7 @@ export const profile = {
 } as const;
 
 export const skillGroups = [
-  { title: "Interfaces", description: "Production UI, reusable components and connected workflows.", skills: ["React", "TypeScript", "JavaScript", "Redux Toolkit", "Tailwind CSS", "HTML & CSS", "Vite"] },
+  { title: "Interfaces", description: "Production UI, reusable components and connected workflows.", skills: ["React", "Next.js", "TypeScript", "JavaScript", "Redux Toolkit", "Tailwind CSS", "HTML & CSS", "Vite"] },
   { title: "Systems", description: "APIs, data models and the boundaries that keep systems reliable.", skills: ["Node.js", "Express.js", "PostgreSQL", "MongoDB", "Socket.IO", "REST APIs", "Session auth & RBAC"] },
   { title: "Delivery", description: "From understanding the requirement to validating the release.", skills: ["Git & GitHub", "Docker Compose", "Postman", "Vercel", "Render", "UAT & testing", "Client collaboration"] },
 ] as const;

@@ -154,7 +154,6 @@ dialog::backdrop { background: var(--overlay); }
 .project-chateph { background: var(--card-cool); }
 .project-afssian { background: var(--card-warm); }
 .project-taskent { background: var(--card-neutral); }
-.project-expenseer { background: var(--card-warm); }
 .project-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 34px; }
 .project-symbol { width: 53px; height: 53px; display: grid; place-items: center; border: 1px solid var(--border-strong); border-radius: 12px; background: var(--symbol-bg); }
 .project-chateph .project-symbol { background: var(--symbol-bg); }
@@ -347,6 +346,21 @@ dialog::backdrop { background: var(--overlay); }
 .resume-project .text-link { color: var(--text-soft); font-size: .72rem; }
 .resume-education + .resume-education { margin-top: 24px; }
 .resume-education p { margin-top: 7px; }
+
+/* Focused hiring/contact additions within the existing editorial system. */
+.availability { display: flex; align-items: center; gap: 10px; margin-top: 20px; color: var(--text-soft); font-size: .72rem; }
+.availability .status-dot { flex-shrink: 0; }
+.work-intro { max-width: 700px; color: var(--text-muted); font-size: .9rem; margin: -10px 0 35px; }
+.contact-intents { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 40px; margin-top: 55px; }
+.contact-intents article { border-top: 1px solid var(--border); padding-top: 25px; }
+.contact-intents h2 { font-size: 1.4rem; }
+.contact-intents article > p:not(.eyebrow) { color: var(--text-muted); font-size: .84rem; margin: 16px 0; max-width: 490px; }
+.resume-downloads, .resume-project-links { display: flex; align-items: center; flex-wrap: wrap; gap: 12px 22px; }
+.resume-project-links { margin-top: 12px; }
+@media (max-width: 699px) {
+  .contact-intents { grid-template-columns: 1fr; gap: 30px; }
+  .availability { font-size: .7rem; }
+}
 .not-found { padding: 100px 0 130px; }
 .not-found .eyebrow { color: var(--accent); }
 .not-found h1 { font-size: clamp(3rem, 6vw, 5.5rem); line-height: 1.1; }

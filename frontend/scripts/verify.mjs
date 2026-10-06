@@ -3,6 +3,7 @@ import fs from "node:fs/promises";
 import path from "node:path";
 import crypto from "node:crypto";
 import ts from "typescript";
+import { verifyDocuments } from "./verify-documents.mjs";
 
 const base = process.env.QA_BASE_URL || "http://localhost:3100";
 async function data(file) {
@@ -17,11 +18,17 @@ const routes = [...coreRoutes, ...detailedProjects.map((project) => `/projects/$
 assert.equal(new Set(projects.map((project) => project.slug)).size, projects.length);
 assert.equal(projects.filter((project) => project.flagship).length, 1);
 assert.equal(projects[0].slug, "ekavio");
-assert.equal(projects[0].live, undefined);
-assert.equal(projects.find((project) => project.slug === "expenseer").live, undefined);
+assert.deepEqual(projects.map((project) => project.slug), ["ekavio", "codisify", "chateph", "afssian", "taskent"]);
+assert.equal(projects[0].live.url, "https://ekavio.afsify.com/");
+assert.equal(projects.find((project) => project.slug === "afssian").live.url, "https://afssian.onrender.com/");
 assert(projects.every((project) => project.stack.length));
 const sha = (bytes) => crypto.createHash("sha256").update(bytes).digest("hex");
-assert.equal(sha(await fs.readFile(`public${profile.resume}`)), sha(await fs.readFile("../ref-files/Muhammed_Afsal_Resume.docx")), "Current resume must match source exactly");
+const approved = JSON.parse(await fs.readFile("scripts/approved-assets.json", "utf8"));
+for (const asset of approved.assets) assert.equal(sha(await fs.readFile(asset.file)), asset.sha256, `Approved asset changed: ${asset.file}`);
+const documents = await verifyDocuments(profile, projects);
+assert.equal(profile.phone.href, "tel:+916235448008");
+assert.equal(profile.whatsapp, "https://wa.me/916235448008");
+if (!process.env.NEXT_PUBLIC_SITE_URL) assert.equal(profile.siteUrl, "https://www.afsify.com");
 
 const sourceFiles = await fs.readdir("src", { recursive: true });
 const oldBrandColors = /#(?:c7ef80|d9f7a7|81b83b|bfd49f|60714d|52643f|738260|668448|b6df6c|445b2d|5f802c|6f8950)\b/i;
@@ -43,7 +50,8 @@ const globals = await fs.readFile("src/app/globals.css", "utf8");
 assert(!/#[0-9a-f]{3,8}\b|\b(?:rgba?|hsla?)\(/i.test(globals), "Component color declarations must consume semantic tokens");
 assert(!oldBrandColors.test(await fs.readFile("scripts/prepare-assets.mjs", "utf8")), "Asset generator must preserve new branding");
 const publicFiles = (await fs.readdir("public", { recursive: true })).filter((file) => /\.(webp|png|docx|pdf|jpg)$/i.test(file));
-assert(!publicFiles.some((file) => /id-card|birthday|\.pdf$/i.test(file)), "Private or obsolete asset published");
+assert(!publicFiles.some((file) => /id-card|birthday/i.test(file)), "Private asset published");
+assert(publicFiles.filter((file) => /\.(pdf|docx)$/i.test(file)).every((file) => Object.values(profile.resume).some((url) => file.replaceAll("\\", "/") === url.slice(1))), "Only approved resume files may be published");
 const links = new Set();
 const images = new Set();
 const results = [];
@@ -59,6 +67,14 @@ for (const route of routes) {
   assert(/property="og:image"/.test(html), `${route}: OG image`);
   assert(/name="twitter:card" content="summary_large_image"/.test(html), `${route}: Twitter`);
   assert(/application\/ld\+json/.test(html), `${route}: Person JSON-LD`);
+  const person = JSON.parse(html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)?.[1] || "null");
+  assert.equal(person.url, profile.siteUrl);
+  assert.equal(person.telephone, profile.phone.e164);
+  assert.equal(person.worksFor.name, "Bizforz");
+  const ogUrl = html.match(/property="og:url" content="([^"]+)"/)?.[1];
+  assert(ogUrl, `${route}: Open Graph URL missing`);
+  assert.equal(new URL(ogUrl).toString(), new URL(route, profile.siteUrl).toString(), `${route}: Open Graph canonical`);
+  if (route === "/" || route === "/projects") assert(html.includes(String(projects.length).padStart(2, "0")), "Derived project count");
   assert(html.indexOf('id="afsify-theme-init"') > 0 && html.indexOf('id="afsify-theme-init"') < html.indexOf("<body"), `${route}: theme initializer before body`);
   const themeMetadata = html.match(/<meta\b[^>]*name="theme-color"[^>]*>/g) || [];
   assert(themeMetadata.some((tag) => tag.includes('media="(prefers-color-scheme: dark)"') && tag.includes('content="#111315"')), `${route}: dark theme metadata`);
@@ -79,10 +95,27 @@ assert.equal((sitemap.match(/<url>/g) || []).length, routes.length);
 for (const route of routes) assert(sitemap.includes(`<loc>${new URL(route, profile.siteUrl)}</loc>`));
 const robots = await (await fetch(`${base}/robots.txt`)).text();
 assert(robots.includes(`Sitemap: ${profile.siteUrl}/sitemap.xml`));
-for (const route of ["/icon.svg", "/apple-icon.png", "/images/brand/social-preview.png", profile.resume]) assert.equal((await fetch(`${base}${route}`)).status, 200, route);
-const expectedHashes = JSON.parse((await fs.readFile("../.reference-hashes.json", "utf8")).replace(/^\uFEFF/, ""));
-for (const entry of expectedHashes) assert.equal(sha(await fs.readFile(entry.Path)).toUpperCase(), entry.Hash, `Reference changed: ${entry.Path}`);
-const output = process.env.QA_OUTPUT_DIR || "artifacts/image-theme-fix/production";
+for (const route of ["/icon.svg", "/apple-icon.png", "/images/brand/social-preview.png", ...Object.values(profile.resume)]) assert.equal((await fetch(`${base}${route}`)).status, 200, route);
+for (const file of Object.values(profile.resume)) {
+  const response = await fetch(`${base}${file}`);
+  assert.equal(sha(Buffer.from(await response.arrayBuffer())), sha(await fs.readFile(`public${file}`)), `Download bytes: ${file}`);
+  assert(response.headers.get("content-type")?.includes(file.endsWith(".pdf") ? "application/pdf" : "application/vnd.openxmlformats-officedocument.wordprocessingml.document"));
+}
+let referencesUnchanged = null;
+let referenceBaseline;
+try {
+  referenceBaseline = await fs.readFile("../.reference-hashes.json", "utf8");
+} catch (error) {
+  const referenceFolders = (await fs.readdir("..", { withFileTypes: true })).filter((entry) => entry.isDirectory() && entry.name.startsWith("ref-"));
+  if (error.code !== "ENOENT" || referenceFolders.length) throw error;
+  console.log("Reference-source audit: unavailable in this checkout (no ref-* folders or baseline). Approved public asset hashes verified instead.");
+}
+if (referenceBaseline) {
+  const expectedHashes = JSON.parse(referenceBaseline.replace(/^\uFEFF/, ""));
+  for (const entry of expectedHashes) assert.equal(sha(await fs.readFile(entry.Path)).toUpperCase(), entry.Hash, `Reference changed: ${entry.Path}`);
+  referencesUnchanged = expectedHashes.length;
+}
+const output = process.env.QA_OUTPUT_DIR || "artifacts/master-update/production";
 await fs.mkdir(output, { recursive: true });
-await fs.writeFile(`${output}/route-results.json`, JSON.stringify({ checkedAt: new Date().toISOString(), routes: results, localLinks: links.size, images: images.size, referencesUnchanged: expectedHashes.length, resumeByteIdentical: true, semanticColors: "pass", oldLimeValues: 0, prePaintThemeScript: "pass", conditionalThemeMetadata: "pass" }, null, 2));
-console.log(`PASS: ${routes.length} routes; single H1, metadata and JSON-LD on every route; ${links.size} local links; ${images.size} image requests; 4 not-found cases; sitemap/robots/icons; byte-identical current résumé; ${expectedHashes.length} reference files unchanged.`);
+await fs.writeFile(`${output}/route-results.json`, JSON.stringify({ checkedAt: new Date().toISOString(), routes: results, localLinks: links.size, images: images.size, referencesUnchanged, approvedAssetsUnchanged: approved.assets.length, resumeByteIdentical: true, documents, canonicalOrigin: profile.siteUrl, semanticColors: "pass", oldLimeValues: 0, prePaintThemeScript: "pass", conditionalThemeMetadata: "pass" }, null, 2));
+console.log(`PASS: ${routes.length} routes; single H1, metadata and JSON-LD; ${links.size} local links; ${images.size} image requests; 4 not-found cases; sitemap/robots/icons; byte-identical PDF/DOCX with approved links; ${approved.assets.length} approved assets unchanged.`);

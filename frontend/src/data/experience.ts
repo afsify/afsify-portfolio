@@ -13,7 +13,7 @@ export const experience: Experience = {
   location: "Kottakkal, Malappuram",
   summary: "Building and maintaining frontend features for production business software, with a direct connection to the people and workflows behind it.",
   contributions: [
-    "Build and maintain React, Redux and Tailwind features for Connect ERP, used across 10+ institutions including colleges, hospitals and businesses.",
+    "Build and maintain React, TypeScript, Redux Toolkit and Tailwind CSS features for Connect ERP, used across 10+ institutions including colleges, hospitals and businesses.",
     "Contribute to HR/payroll, attendance and geo-face punching, task management, leave requests, bus passes and news workflows.",
     "Integrate REST APIs, debug production issues and improve UI/UX in collaboration with backend and product teams.",
     "Work with clients on requirements, product demos, testing/UAT and follow-ups, translating operational needs into practical software changes.",

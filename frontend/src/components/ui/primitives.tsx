@@ -21,8 +21,8 @@ export function TextLink({ href, children, className = "" }: { href: string; chi
 export function ExternalLink({ href, children, className = "text-link" }: { href: string; children: ReactNode; className?: string }) {
   return <a href={href} target="_blank" rel="noopener noreferrer" className={className}>{children}<ArrowUpRight size={16} aria-hidden="true" /><span className="sr-only"> (opens in a new tab)</span></a>;
 }
-export function ResumeButton({ className = "button button-outline" }: { className?: string }) {
-  return <a className={className} href={profile.resume} download>Download resume <Download size={17} aria-hidden="true" /><span className="sr-only"> (DOCX)</span></a>;
+export function ResumeButton({ className = "button button-outline", format = "pdf" }: { className?: string; format?: "pdf" | "docx" }) {
+  return <a className={className} href={profile.resume[format]} download>Download CV ({format.toUpperCase()}) <Download size={17} aria-hidden="true" /></a>;
 }
 export function TechStack({ stack, compact = false }: { stack: readonly string[]; compact?: boolean }) {
   const items = compact ? stack.slice(0, 4) : stack;

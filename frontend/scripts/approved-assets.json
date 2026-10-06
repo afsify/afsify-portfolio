@@ -1,0 +1,36 @@
+{
+  "approvedOn": "2026-10-06",
+  "description": "Supplied updated PDF/DOCX and approved original-resolution photographs. Update only when approved source files change.",
+  "assets": [
+    {
+      "file": "public/documents/muhammed-afsal-resume.pdf",
+      "sha256": "46350b92f22160706e11f0145957ecafbc9449ec79748bdab7d76c30288d3010",
+      "bytes": 58176
+    },
+    {
+      "file": "public/documents/muhammed-afsal-resume.docx",
+      "sha256": "5cb121d1b986aa11c456a8c899340b7a0fdf77ad5fa66f59eaab3c14bd0ac501",
+      "bytes": 39629
+    },
+    {
+      "file": "public/images/profile/muhammed-afsal.webp",
+      "sha256": "435d65d4ac40c2abe6929e9217532da7b327ed58881d0fb3c6818beca7467d0e",
+      "bytes": 232894
+    },
+    {
+      "file": "public/images/experience/levalor-delivery.webp",
+      "sha256": "a581357a4bbbbc8b402f4baae4e36b1c8fcffc9a94588b4b37f422c26e84859d",
+      "bytes": 222264
+    },
+    {
+      "file": "public/images/experience/bizforz-anniversary.webp",
+      "sha256": "e5fcaba4fe14ec0b737dd53a6da89400fd1036505c27bacc4f0f96bfc6fcf637",
+      "bytes": 1098264
+    },
+    {
+      "file": "public/images/experience/brototype-graduation.webp",
+      "sha256": "2acaa437d5d5ec218e049bacbdb13ed25a2f00b28de7b37bc245c63935a5cef2",
+      "bytes": 365726
+    }
+  ]
+}

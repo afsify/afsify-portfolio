@@ -6,7 +6,7 @@ import ts from "typescript";
 import { verifyThemes, assertTheme } from "./verify-theme-behavior.mjs";
 
 const base = process.env.QA_BASE_URL || "http://localhost:3100";
-const rootOutput = process.env.QA_OUTPUT_DIR || "artifacts/image-theme-fix/production";
+const rootOutput = process.env.QA_OUTPUT_DIR || "artifacts/master-update/production";
 const output = rootOutput;
 await fs.mkdir(output, { recursive: true });
 const chrome = process.env.QA_CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe";
@@ -55,7 +55,7 @@ try {
   } else {
     const source = await fs.readFile("src/data/projects.ts", "utf8");
     const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
-    const { detailedProjects } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`);
+    const { projects, detailedProjects, projectCategories } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`);
     const routes = ["/", "/about", "/experience", "/projects", "/contact", "/resume", ...detailedProjects.map((project) => `/projects/${project.slug}`)];
     const widths = [360, 390, 430, 768, 1024, 1280, 1440];
     const checks = [];
@@ -66,11 +66,13 @@ try {
         const state = await page.evaluate(() => ({
           viewport: innerWidth, width: document.documentElement.scrollWidth,
           h1: document.querySelectorAll("h1").length,
+          headingLevels: [...document.querySelectorAll("main h1,main h2,main h3,main h4")].map((node) => Number(node.tagName.slice(1))),
           brokenImages: [...document.images].filter((image) => !image.complete || image.naturalWidth === 0).map((image) => image.getAttribute("src")),
           smallTargets: [...document.querySelectorAll("main a,main button")].filter((node) => node.getBoundingClientRect().width > 0 && node.getBoundingClientRect().height < 24).length,
         }));
         assert(state.width <= width, `${route} at ${width}: overflow ${state.width}`);
         assert.equal(state.h1, 1, `${route}: H1`);
+        assert(state.headingLevels.every((level, index, levels) => index === 0 ? level === 1 : level <= levels[index - 1] + 1), `${route}: skipped heading level`);
         assert.equal(state.brokenImages.length, 0, `${theme} ${route}: broken images ${state.brokenImages.join(", ")}`);
         assert.equal(state.smallTargets, 0, `${route}: small interaction targets`);
         if ([390, 768, 1440].includes(width)) await page.screenshot({ path: `${output}/${route === "/" ? "home" : route.slice(1).replaceAll("/", "-")}-${width}.png`, fullPage: true });
@@ -122,17 +124,40 @@ try {
     await page.getByRole("dialog").waitFor({ state: "detached" });
     assert.equal(await page.evaluate(() => document.body.style.overflow), "");
     await load("/projects", 390);
-    for (const [filter, count] of [["Full-stack", 2], ["Realtime", 1], ["E-commerce", 1], ["Dashboard", 2], ["All work", 6]]) {
+    for (const filter of [...projectCategories.slice(1), "All work"]) {
+      const count = projects.filter((project) => filter === "All work" || project.category === filter).length;
       await page.getByRole("button", { name: filter, exact: true }).click();
       assert.equal(await page.locator("#project-results article").count(), count, filter);
       assert.equal(await page.getByRole("button", { name: filter, exact: true }).getAttribute("aria-pressed"), "true");
     }
-    const downloadEvent = page.waitForEvent("download");
     await page.goto(`${base}/resume`);
-    await page.getByRole("link", { name: "Download resume (DOCX)" }).click();
-    const download = await downloadEvent;
-    assert.equal(download.suggestedFilename(), "muhammed-afsal-resume.docx");
-    assert.equal(await download.failure(), null);
+    for (const format of ["pdf", "docx"]) {
+      const downloadEvent = page.waitForEvent("download");
+      await page.getByRole("link", { name: `Download CV (${format.toUpperCase()})`, exact: true }).click();
+      const download = await downloadEvent;
+      assert.equal(download.suggestedFilename(), `muhammed-afsal-resume.${format}`);
+      assert.equal(await download.failure(), null);
+      const downloadBytes = await fs.readFile(await download.path());
+      assert(downloadBytes.equals(await fs.readFile(`public/documents/muhammed-afsal-resume.${format}`)), "Downloaded approved bytes");
+    }
+    for (const [slug, url] of [["ekavio", "https://ekavio.afsify.com/"], ["afssian", "https://afssian.onrender.com/"]]) {
+      assert(await page.locator(`.resume-project a[href="${url}"]`).count() === 1);
+      await load(`/projects/${slug}`, 390);
+      assert(await page.locator(`.project-hero a[href="${url}"]`).count() === 1);
+      await load("/resume", 390);
+    }
+    assert((await page.locator(".resume-header").innerText()).includes("+91 6235448008"));
+    assert((await page.locator(".resume-paper").innerText()).includes("sole normal runtime data authority"));
+    await page.emulateMedia({ media: "print" });
+    assert.equal(await page.locator(".site-header").isVisible(), false);
+    assert.equal(await page.locator(".resume-toolbar").isVisible(), false);
+    assert(await page.locator(".resume-header").isVisible());
+    await page.pdf({ path: `${output}/resume-print.pdf`, format: "A4", printBackground: true });
+    await page.emulateMedia({ media: "screen" });
+    await load("/contact", 390);
+    for (const href of ["mailto:afsify2000@gmail.com", "tel:+916235448008", "https://wa.me/916235448008", "https://www.linkedin.com/in/afsify/", "https://github.com/afsify"]) assert(await page.locator(`main a[href="${href}"]`).count() > 0, `Contact link ${href}`);
+    assert(await page.getByRole("link", { name: "Discuss a role", exact: true }).count() === 1);
+    assert(await page.getByRole("link", { name: "Discuss a project", exact: true }).count() === 1);
     await page.goto(base);
     await page.keyboard.press("Tab");
     assert.equal(await page.evaluate(() => document.activeElement?.textContent), "Skip to content");

@@ -1,6 +1,6 @@
 # afsify — Muhammed Afsal
 
-A personal portfolio for Muhammed Afsal, Frontend Developer at Bizforz and Full Stack Web Developer. Ten substantive pages present production experience, independent projects, the engineering behind EkaVio, selected milestones and direct contact options.
+A personal portfolio for Muhammed Afsal, Frontend Developer at Bizforz and Full Stack Web Developer. Ten substantive pages present production experience, five independent projects, the engineering behind EkaVio, selected milestones and direct contact options. Hiring is the primary focus; selected freelance web projects are secondary. Production URL: https://www.afsify.com/.
 
 ## Stack
 
@@ -27,7 +27,7 @@ Development uses `next dev --webpack`. In this Windows workspace, Console Ninja 
 | `npm start` | Serve the production build |
 | `npm run lint` | ESLint, zero warnings allowed |
 | `npm run typecheck` | Generate route types and run strict TypeScript |
-| `npm run assets` | Recreate optimized source photographs, font, resume copy and AFS graphite/platinum social/icon artwork |
+| `npm run assets` | Recreate approved photographs, font and AFS artwork; never overwrite resume files |
 | `npm run verify` | Source/content, HTTP routes, metadata, images, resume and reference-integrity checks |
 | `npm run verify:browser` | Responsive, accessibility and interaction checks in headless Chrome |
 | `npm run verify:images` | Actual delivered photo resolution at mobile, tablet and desktop, including retina displays |
@@ -45,13 +45,13 @@ Development uses `next dev --webpack`. In this Windows workspace, Console Ninja 
 | `/` | Identity, selected work, experience, milestones and contact CTA |
 | `/about` | Professional narrative, work principles, technical focus and education |
 | `/experience` | Bizforz contributions, product domains, recognition and separate training history |
-| `/projects` | Six projects with accessible category filters |
+| `/projects` | Five projects with data-derived counts and accessible category filters |
 | `/projects/ekavio` | Architecture, tenant boundaries, sessions, RBAC, entitlements, storage and delivery |
 | `/projects/codisify` | E-learning project notes |
 | `/projects/chateph` | Realtime ephemeral messaging project notes |
 | `/projects/afssian` | E-commerce project notes |
-| `/contact` | Email, GitHub, LinkedIn and Solo.to |
-| `/resume` | Readable current professional summary and current DOCX download |
+| `/contact` | Hiring/project enquiries, email, phone, WhatsApp, LinkedIn and GitHub |
+| `/resume` | Current HTML summary, primary PDF and secondary DOCX downloads |
 
 The App Router also generates `/sitemap.xml`, `/robots.txt`, `/icon.svg`, `/apple-icon.png`, a custom 404 and a recoverable runtime error view. Unknown project slugs return 404; no empty project pages are generated.
 
@@ -60,7 +60,7 @@ The App Router also generates `/sitemap.xml`, `/robots.txt`, `/icon.svg`, `/appl
 ```text
 frontend/
 ├── public/
-│   ├── documents/muhammed-afsal-resume.docx
+│   ├── documents/muhammed-afsal-resume.{pdf,docx}
 │   └── images/{profile,experience,brand}/
 ├── scripts/                 # asset preparation and verifiable QA
 ├── src/
@@ -82,10 +82,11 @@ frontend/
 
 ## Content and asset strategy
 
-The current `Muhammed_Afsal_Resume.docx` and the supplied brief are authoritative. The historical PDF contributes only supported project context. See the root `PORTFOLIO_CONTENT_AUDIT.md` for source decisions and exclusions.
+The supplied October 2026 PDF and DOCX in `public/documents/`, the current professional brief, and the current EkaVio repository are authoritative. `scripts/approved-assets.json` records the approved resume and photograph hashes. Earlier reference folders and their hash baseline are absent from this checkout.
 
-- `src/data/profile.ts`: identity, canonical host, social links, narrative, skills and principles.
+- `src/data/profile.ts`: identity, canonical host, centralized phone/E.164/tel/WhatsApp values, hiring/project email links, resume paths, narrative and skills.
 - `experience.ts`, `education.ts`, `recognition.ts`: professional history and photography captions.
+- `resume.ts`: concise HTML resume details aligned with the supplied PDF/DOCX. `services.ts`: secondary freelance services.
 - `projects.ts`: one typed project list shared by cards, filters, detail pages, static params and metadata.
 - `navigation.ts`: primary navigation and core route inventory.
 - `src/app/globals.css`: components, approved responsive layout, print and reduced-motion rules; component colors consume semantic tokens. Tailwind remains available for small utility adjustments.
@@ -115,7 +116,7 @@ The synchronous head initializer sets `data-theme` before body content paints. A
 
 Navigation and mobile-dialog controls offer Sun/Moon icons, action-specific accessible labels, at least 44px targets and a 3px keyboard focus ring. The initial accessible label is selected by CSS, so server/client markup is identical. Major pages remain server components. There is no theme dependency or new decorative motion; existing reduced-motion rules remain.
 
-Next.js emits conditional dark/light `theme-color` fallbacks. The head initializer prepends one dedicated override matching the selected theme, and the toggle updates it. A focused head observer keeps it first when route metadata updates. Keeping that override separate avoids mutating metadata managed by React. Canonical/OG/Twitter/JSON-LD/sitemap/robots remain unchanged.
+Next.js emits conditional dark/light `theme-color` fallbacks. The head initializer prepends one dedicated override matching the selected theme, and the toggle updates it. A focused head observer keeps it first when route metadata updates. Keeping that override separate avoids mutating metadata managed by React. Canonical/OG/Twitter/JSON-LD/sitemap/robots consistently use the configured production origin.
 
 ## Images and source integrity
 
@@ -123,18 +124,18 @@ Images are optimized locally with Sharp, which strips source metadata by default
 
 The four photographs retain their original dimensions (1254×1254, 1906×1798, 2304×3072 and 2048×1328) as quality-92 WebP sources. Next.js serves responsive WebP derivatives at quality 90. `src/lib/image-sizes.ts` accounts for the actual responsive card widths and the extra source pixels required by `object-fit: cover`, including the wide graduation photo and tall portrait frames. Only the homepage hero photo is preloaded; the about photo and recognition photos use default lazy loading. There is no enlargement, sharpening, denoising or photographic retouching.
 
-The current resume download intentionally preserves the supplied document, including its professional contact information. The page makes the DOCX format explicit. No PDF is fabricated or mislabeled.
+The supplied updated PDF and DOCX retain their original bytes and clickable contact/project links. PDF is the primary recruiter download; DOCX is secondary. The HTML summary uses the same professional facts, current contact details and live/source links, with an explicit EkaVio staging note.
 
 ## Updating the resume
 
-1. Replace `public/documents/muhammed-afsal-resume.docx` with the approved current resume, or update the canonical source and run `npm run assets`.
-2. Update the typed data to match substantive changes. The HTML resume is a structured summary, not a file viewer.
-3. When an approved current PDF is available, place it in `public/documents/`, update `profile.resume` and the format labels in `ResumeButton` and `/resume`, and update the verification assertions accordingly.
-4. Verify the download, metadata and content. Never substitute the historical CV.
+1. Place only approved files at `public/documents/muhammed-afsal-resume.pdf` and `public/documents/muhammed-afsal-resume.docx`.
+2. Check their text and clickable links, then update the matching SHA-256 entries in `scripts/approved-assets.json`. This is an explicit source approval step; do not auto-refresh hashes during verification.
+3. Synchronize `src/data/profile.ts`, `resume.ts`, `experience.ts` and `projects.ts` with substantive changes. The HTML page is a structured summary.
+4. Run route/browser checks for both downloads. `npm run assets` never copies or modifies resume binaries, so it cannot restore an obsolete resume.
 
 ## Adding a project
 
-Add a `Project` object to `src/data/projects.ts` with a unique slug, supported stack and valid repository URL. Add an entry to the icon mapping in `ProjectCard.tsx` and an optional CSS surface variant. Supplying `detail` automatically creates a static detail route and sitemap entry; omitting it leaves a supporting project card. Add a `live` object only after checking the destination, with its verification date. Project filters use the existing categories; expand the category union/list if needed. Keep EkaVio as the sole flagship unless intentionally changing the editorial hierarchy.
+Add a `Project` object to `src/data/projects.ts` with a unique slug, supported stack and valid repository URL. Add an entry to the icon mapping in `ProjectCard.tsx` and an optional CSS surface variant. Supplying `detail` automatically creates a static detail route and sitemap entry; omitting it leaves a supporting project card. Use a `live` object for an authoritative public URL. Set `verifiedOn` only after a successful reachability check using the actual date; omit it if reachability is unverified. EkaVio uses the label `View staging`; its public site is not approved for real customer data. Afssian's supplied live URL remains available as a link even when its Render host times out. Project filters use the existing categories; expand the category union/list if needed. Keep EkaVio as the sole flagship unless intentionally changing the editorial hierarchy.
 
 ## Validation
 
@@ -155,21 +156,21 @@ npm run verify:browser
 npm run verify:images
 ```
 
-The scripts default to `http://localhost:3100`; set `QA_BASE_URL` to change it. Browser checks default to the locally installed Windows Chrome path. Set `QA_CHROME_PATH` for another Chromium executable. No browser download is required in the validated environment. `node scripts/verify-browser.mjs --preview` captures both homepage themes at 390, 768 and 1440px. Full QA checks all ten routes in both themes at 360, 390, 430, 768, 1024, 1280 and 1440px (140 checks), saves full-page screenshots at 390/768/1440px, and runs axe at 390/1440px plus both mobile dialogs (42 scans). It verifies keyboard/menu/filter/download/reduced-motion behavior in each theme, then exercises real navbar clicks, root attributes, visible colors, localStorage, OS preference, persistence, metadata, cross-tab synchronization, unavailable storage and saved-theme initialization with hydration deliberately delayed. The image suite checks 56 delivered photos at DPR 1/2, plus mobile DPR 3, and saves retina photo captures. Final evidence goes into ignored `artifacts/image-theme-fix/production/`; use `QA_OUTPUT_DIR` to override it. Earlier `artifacts/themes/` and `artifacts/browser/` evidence remains intact and is historical.
+The scripts default to `http://localhost:3100`; set `QA_BASE_URL` to change it. Browser checks default to the locally installed Windows Chrome path. Set `QA_CHROME_PATH` for another Chromium executable. No browser download is required in the validated environment. `node scripts/verify-browser.mjs --preview` captures both homepage themes at 390, 768 and 1440px. Full QA checks all ten routes in both themes at 360, 390, 430, 768, 1024, 1280 and 1440px (140 checks), saves full-page screenshots at 390/768/1440px, and runs axe at 390/1440px plus both mobile dialogs (42 scans). It verifies keyboard/menu/filter/download/reduced-motion behavior in each theme, then exercises real navbar clicks, root attributes, visible colors, localStorage, OS preference, persistence, metadata, cross-tab synchronization, unavailable storage and saved-theme initialization with hydration deliberately delayed. The image suite checks 56 delivered photos at DPR 1/2, plus mobile DPR 3, and saves retina photo captures. Final evidence goes into ignored `artifacts/master-update/production/`; use `QA_OUTPUT_DIR` to override it. Existing earlier evidence is preserved when present. The prior validation report is archived under `artifacts/master-update/previous-validation-report.md`.
 
-`verify` also compares the resume to its canonical source and hashes all reference files against the root `.reference-hashes.json` captured before implementation. These source-integrity checks are for this supplied workspace; they are not build or runtime dependencies.
+`verify` checks approved public asset hashes, actual PDF/DOCX download bytes, embedded contact/project links, five project slugs and canonical metadata. If reference folders and `.reference-hashes.json` are present, it also enforces the original reference hash checks. In this clean checkout both are absent, so the report marks that historical audit unavailable rather than claiming 383 files were rechecked.
 
 `node scripts/check-external.mjs` performs read-only availability checks against supplied external URLs and records results. Third-party availability can change. HTTP success does not establish backend or authenticated functionality.
 
 ## Deployment
 
-Deploy as a standard Next.js project with **Root Directory: `frontend`**, install command `npm ci`, and build command `npm run build`. The default production host is `https://afsify.vercel.app`. On Vercel, use the Next.js preset. No backend, credentials or required environment variables are needed.
+Deploy as a standard Next.js project with **Root Directory: `frontend`**, install command `npm ci`, and build command `npm run build`. The default production host is `https://www.afsify.com`. On Vercel, use the Next.js preset. No backend, credentials or required environment variables are needed.
 
 For a custom domain, set `NEXT_PUBLIC_SITE_URL` to its HTTPS origin before building. This drives canonical URLs, Open Graph, Person JSON-LD, robots and sitemap. Do not set it to a temporary preview URL for a production build. Hosting-level preview protection can keep private previews out of search results.
 
 Keep Next.js image optimization enabled. This is a standard Next.js deployment, not an `output: export` static-folder build. Self-hosting uses `npm ci`, `npm run build`, then `npm start` behind your HTTPS proxy. Production build does not require network font downloads.
 
-Security headers include clickjacking protection, MIME sniffing protection, a restrictive camera/microphone/location policy and a referrer policy. The portfolio uses no cookies; its only localStorage value is the explicit `afsify-theme` preference. There is no contact submission endpoint; the email link opens the visitor’s mail application.
+Security headers include clickjacking protection, MIME sniffing protection, a restrictive camera/microphone/location policy and a referrer policy. The portfolio uses no cookies; its only localStorage value is the explicit `afsify-theme` preference. Contact details are deliberately public; email, phone and WhatsApp use standard links without a form or new backend. There is no contact submission endpoint; the email link opens the visitor’s mail application.
 
 ## Future backend
 

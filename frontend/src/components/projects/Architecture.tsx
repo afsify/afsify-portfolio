@@ -8,9 +8,9 @@ export function Architecture({ compact = false }: { compact?: boolean }) {
       <span className="diagram-connector" aria-hidden="true"><ArrowDown size={16} /></span>
       <div className="architecture-node auth-node"><ShieldCheck size={22} aria-hidden="true" /><span>Identity & access<span className="node-detail">Sessions · Memberships · RBAC</span></span><span className="node-chip">API</span></div>
       <div className="diagram-fork" aria-hidden="true" />
-      <div className="database-grid"><div className="database-node"><Database size={20} aria-hidden="true" /><strong>PostgreSQL</strong><span>Identity & commercial authority</span></div><div className="database-node"><Boxes size={20} aria-hidden="true" /><strong>MongoDB</strong><span>Operational domains</span></div></div>
+      <div className="database-grid"><div className="database-node"><Database size={20} aria-hidden="true" /><strong>PostgreSQL</strong><span>Sole runtime data authority</span></div><div className="database-node"><Boxes size={20} aria-hidden="true" /><strong>Operations</strong><span>Tenant & branch-scoped records</span></div></div>
       <div className="diagram-domains"><span>Queue</span><span>Inventory</span><span>Ledger</span><span>Attendance</span></div>
     </div>
-    <p className="diagram-footnote">Tenant-aware by design.</p>
+    <p className="diagram-footnote">MongoDB: legacy migration & recovery tooling only.</p>
   </figure>;
 }

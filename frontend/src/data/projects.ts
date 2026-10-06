@@ -17,7 +17,7 @@ export interface Project {
   status: "Active development" | "Personal project";
   stack: readonly string[];
   github: string;
-  live?: { url: string; verifiedOn: string };
+  live?: { url: string; label?: string; verifiedOn?: string };
   flagship?: boolean;
   detail?: { intro: string; role: string; sections: readonly ProjectSection[] };
 }
@@ -38,19 +38,23 @@ export const projects: readonly Project[] = [
       "Node.js",
       "Express.js",
       "PostgreSQL",
-      "MongoDB",
       "Docker Compose",
       "Socket.IO",
     ],
     github: "https://github.com/afsify/ekavio",
+    live: { url: "https://ekavio.afsify.com/", label: "View staging", verifiedOn: "2026-10-06" },
     detail: {
       intro:
-        "Building the foundations behind connected business operations: organizations, branches, people and the permissions that bring them together.",
+        "A React and TypeScript PWA for small-business operations, backed by an Express API and PostgreSQL. Built around the people, branches and permissions behind everyday work.",
       role: "Personal project · Full-stack development",
       sections: [
         {
           title: "The problem",
-          body: "Small and medium businesses need to manage queues, inventory, ledgers and attendance while keeping each organization’s people and data in the right context. EkaVio brings these operational domains into a shared platform with explicit tenant and branch boundaries.",
+          body: "Shops, clinics, salons and service businesses need to coordinate customers, appointments, queues, inventory, dues and attendance. EkaVio brings these workflows together while keeping each organization’s people and records in the right context.",
+        },
+        {
+          title: "My role",
+          body: "I design and develop the React/Vite PWA, Express/TypeScript API, data model and delivery tooling as an independent full-stack project. The work spans usable frontend workflows, server-side access control and the migration to a single runtime data store.",
         },
         {
           title: "Designed for organizations and branches",
@@ -71,8 +75,12 @@ export const projects: readonly Project[] = [
           body: "RBAC answers what a member may do. Commercial entitlements answer which capabilities an organization has. Keeping these decisions separate lets protected operations check the member’s permission alongside the organization’s module access.",
         },
         {
-          title: "Two stores, clear responsibilities",
-          body: "PostgreSQL is the authority for identity, sessions, authorization and commercial data. MongoDB holds operational records for domains such as queue, inventory, ledger and attendance. Migration and cutover tooling support the transition without treating operational data as identity authority.",
+          title: "One runtime source of truth",
+          body: "PostgreSQL is the sole normal runtime data authority, covering identity, commercial entitlements and operational records. Transactional migrations, parity checks and cutover tooling support that transition. MongoDB remains only for explicit legacy migration, reconciliation, archive/recovery and compatibility tooling; normal server startup and readiness use PostgreSQL.",
+        },
+        {
+          title: "Account recovery and invitations",
+          body: "Email becomes login and recovery authority only after verification. Account recovery and password changes revoke sessions, while staff invitations let recipients choose their own passwords. These flows have local integration and browser acceptance coverage; hosted email delivery still depends on deployment configuration.",
         },
         {
           title: "Realtime with tenant context",
@@ -80,11 +88,11 @@ export const projects: readonly Project[] = [
         },
         {
           title: "A repeatable development foundation",
-          body: "Docker Compose brings services together with health checks. Repeatable lint, typecheck, test and build gates support development, alongside PostgreSQL migration and cutover verification tooling.",
+          body: "Docker Compose and health/readiness checks support predictable startup. Repeatable lint, typecheck, test and build gates are paired with transactional migrations, parity checks, API integration tests and browser acceptance tests using disposable local data.",
         },
         {
           title: "Where it stands",
-          body: "EkaVio is in active development. The current focus is a dependable engineering foundation for multi-tenant operations. The repository documents the implementation and ongoing work.",
+          body: "EkaVio is in active development with a public staging site. It is for disposable development data and is not approved for real customer data. Hosted recovery and final operational acceptance remain open; local engineering gates do not establish commercial production readiness.",
         },
       ],
     },
@@ -108,7 +116,7 @@ export const projects: readonly Project[] = [
       "JWT",
     ],
     github: "https://github.com/afsify/codisify-devlearn",
-    live: { url: "https://codisify.vercel.app", verifiedOn: "2026-09-20" },
+    live: { url: "https://codisify.vercel.app", verifiedOn: "2026-10-06" },
     detail: {
       intro:
         "An e-learning platform connecting learners with courses, developer services and ongoing discussions.",
@@ -153,7 +161,7 @@ export const projects: readonly Project[] = [
       "Socket.IO",
     ],
     github: "https://github.com/afsify/chateph-messenger",
-    live: { url: "https://chateph.vercel.app", verifiedOn: "2026-09-20" },
+    live: { url: "https://chateph.vercel.app", verifiedOn: "2026-10-06" },
     detail: {
       intro:
         "A realtime messaging project exploring short-lived conversations and a lightweight path into chat.",
@@ -198,6 +206,7 @@ export const projects: readonly Project[] = [
       "Razorpay",
     ],
     github: "https://github.com/afsify/afssian-ecommerce",
+    live: { url: "https://afssian.onrender.com/", verifiedOn: "2026-10-06" },
     detail: {
       intro:
         "An electronics e-commerce project spanning the shopping experience and the operational work behind it.",
@@ -235,7 +244,7 @@ export const projects: readonly Project[] = [
     status: "Personal project",
     stack: ["React", "Redux", "Tailwind CSS", "Ant Design", "Chart.js"],
     github: "https://github.com/afsify/taskent-dashboard",
-    live: { url: "https://taskent.vercel.app", verifiedOn: "2026-09-20" },
+    live: { url: "https://taskent.vercel.app", verifiedOn: "2026-10-06" },
   },
 ];
 export const flagshipProject = projects[0];

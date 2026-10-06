@@ -32,8 +32,8 @@ if (!brandOnly) {
   await fs.writeFile(path.join(root, "artifacts/image-theme-fix/image-generation.json"),
     JSON.stringify({ checkedAt: new Date().toISOString(), images: imageAudit }, null, 2));
   if (!photosOnly) {
-    await fs.mkdir(path.join(root, "public/documents"), { recursive: true });
-    await fs.copyFile(path.join(sources, "Muhammed_Afsal_Resume.docx"), path.join(root, "public/documents/muhammed-afsal-resume.docx"));
+    // Approved resume binaries are maintained separately; never replace them
+    // with a historical document when refreshing photos, fonts or artwork.
     await fs.mkdir(path.join(root, "public/images/brand"), { recursive: true });
     await sharp(path.join(sources, "afsify-logo.png")).rotate().resize({ width: 100, withoutEnlargement: true })
       .webp({ quality: 84 }).toFile(path.join(root, "public/images/brand/afs-mark.webp"));

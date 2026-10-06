@@ -4,7 +4,7 @@ import sharp from "sharp";
 import { chromium } from "playwright";
 
 const base = process.env.QA_BASE_URL || "http://localhost:3100";
-const output = process.env.QA_OUTPUT_DIR || "artifacts/image-theme-fix/production";
+const output = process.env.QA_OUTPUT_DIR || "artifacts/master-update/production";
 await fs.mkdir(`${output}/images`, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.QA_CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe", headless: true });
 const checks = [], exceptions = [], consoleErrors = [];
