@@ -20,7 +20,45 @@ export default async function ProjectDetail({ params }: Props) {
   const project = getProject(slug);
   if (!project?.detail) notFound();
   const nextProject = detailedProjects[(detailedProjects.indexOf(project) + 1) % detailedProjects.length];
-  return <><section className={`project-hero project-hero-${project.slug}`}><Container><Link href="/projects" className="breadcrumb"><ArrowLeft size={16} aria-hidden="true" />All projects</Link><div className="project-detail-top"><Eyebrow>{project.flagship ? "Flagship / Engineering case study" : `${project.category} / Project notes`}</Eyebrow><span className="project-status"><span className="status-dot" />{project.status}</span></div><h1>{project.title}<span>.</span></h1><p className="detail-subtitle">{project.subtitle}</p><p className="lead">{project.detail.intro}</p><div className="button-row"><ExternalLink href={project.github} className="button button-accent">View on GitHub</ExternalLink>{project.live && <ExternalLink href={project.live.url} className="button button-outline">{project.live.label || "Live demo"}</ExternalLink>}</div><div className="project-facts"><div><span>Role</span><p>{project.detail.role}</p></div><div><span>Category</span><p>{project.category}</p></div><div><span>Status</span><p>{project.status}</p></div></div></Container></section>
+  const professional = project.ownership === "professional";
+  return <>
+    <section className={`project-hero project-hero-${project.slug}`}><Container>
+      <Link href="/projects" className="breadcrumb"><ArrowLeft size={16} aria-hidden="true" />All projects</Link>
+      <div className="project-detail-top">
+        <Eyebrow>{project.flagship ? "Flagship / Engineering case study" : professional ? "Professional website / Case study" : `${project.category} / Project notes`}</Eyebrow>
+        <span className="project-status"><span className="status-dot" />{project.status}</span>
+      </div>
+      <h1>{project.title}<span>.</span></h1>
+      <p className="detail-subtitle">{project.subtitle}</p>
+      <p className="lead">{project.detail.intro}</p>
+      <div className="button-row">
+        {project.github && <ExternalLink href={project.github} className="button button-accent">View on GitHub</ExternalLink>}
+        {project.live && <ExternalLink href={project.live.url} className={`button ${professional ? "button-accent" : "button-outline"}`}>{project.live.label || "Live demo"}</ExternalLink>}
+      </div>
+      <div className="project-facts">
+        <div><span>Role</span><p>{project.detail.role}</p></div>
+        <div><span>{professional ? "Sector" : "Category"}</span><p>{professional ? project.sector : project.category}</p></div>
+        <div><span>{professional ? "Location" : "Status"}</span><p>{professional ? project.location : project.status}</p></div>
+      </div>
+    </Container></section>
     {project.flagship && <section className="architecture-section light-section"><Container><div className="architecture-intro"><Eyebrow>Under the surface</Eyebrow><h2>Clear boundaries.<br />Connected operations.</h2><p>A React/Vite PWA, an Express/TypeScript API and PostgreSQL as the sole normal runtime data authority.</p></div><Architecture /></Container></section>}
-    <section className="section light-section"><Container><div className="case-study"><aside className="case-sidebar"><Eyebrow>Built with</Eyebrow><TechStack stack={project.stack} /><div className="case-source"><p>Explore the implementation and project documentation.</p><ExternalLink href={project.github}>Source repository</ExternalLink></div></aside><div className="case-content">{project.detail.sections.map((section, index) => <section key={section.title}><span className="case-index">{String(index + 1).padStart(2, "0")}</span><div><h2>{section.title}</h2><p>{section.body}</p>{section.points && <ul>{section.points.map((point) => <li key={point}>{point}</li>)}</ul>}</div></section>)}</div></div><Link href={`/projects/${nextProject.slug}`} className="next-project"><span><span className="eyebrow">Next project</span><strong>{nextProject.title}</strong></span><ArrowUpRight size={38} strokeWidth={1.4} aria-hidden="true" /></Link></Container></section><ContactCTA /></>;
+    <section className="section light-section"><Container>
+      <div className="case-study">
+        <aside className="case-sidebar">
+          {professional ? <div className="case-attribution">
+            <Eyebrow>Delivered through Bizforz</Eyebrow>
+            <p>{project.employer}</p>
+            <p>Professional website work as a Frontend Developer.</p>
+            <Link href="/experience" className="text-link">View my experience <ArrowUpRight size={16} aria-hidden="true" /></Link>
+          </div> : <>
+            {project.stack.length > 0 && <><Eyebrow>Built with</Eyebrow><TechStack stack={project.stack} /></>}
+            {project.github && <div className="case-source"><p>Explore the implementation and project documentation.</p><ExternalLink href={project.github}>Source repository</ExternalLink></div>}
+          </>}
+        </aside>
+        <div className="case-content">{project.detail.sections.map((section, index) => <section key={section.title}><span className="case-index">{String(index + 1).padStart(2, "0")}</span><div><h2>{section.title}</h2><p>{section.body}</p>{section.points && <ul>{section.points.map((point) => <li key={point}>{point}</li>)}</ul>}</div></section>)}</div>
+      </div>
+      <Link href={`/projects/${nextProject.slug}`} className="next-project"><span><span className="eyebrow">Next project</span><strong>{nextProject.title}</strong></span><ArrowUpRight size={38} strokeWidth={1.4} aria-hidden="true" /></Link>
+    </Container></section>
+    <ContactCTA />
+  </>;
 }

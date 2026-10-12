@@ -1,6 +1,6 @@
 # afsify — Muhammed Afsal
 
-A personal portfolio for Muhammed Afsal, Frontend Developer at Bizforz and Full Stack Web Developer. Ten substantive pages present production experience, five independent projects, the engineering behind EkaVio, selected milestones and direct contact options. Hiring is the primary focus; selected freelance web projects are secondary. Production URL: https://www.afsify.com/.
+A personal portfolio for Muhammed Afsal, Frontend Developer at Bizforz and Full Stack Web Developer. Thirteen substantive pages present production experience, three employer-delivered websites, five independent projects, the engineering behind EkaVio, selected milestones and direct contact options. Hiring is the primary focus; selected freelance web projects are secondary. Production URL: https://www.afsify.com/.
 
 ## Stack
 
@@ -42,14 +42,17 @@ Development uses `next dev --webpack`. In this Windows workspace, Console Ninja 
 
 | Route | Content |
 | --- | --- |
-| `/` | Identity, selected work, experience, milestones and contact CTA |
+| `/` | Identity, flagship engineering work, professional websites, experience, milestones and contact CTA |
 | `/about` | Professional narrative, work principles, technical focus and education |
 | `/experience` | Bizforz contributions, product domains, recognition and separate training history |
-| `/projects` | Five projects with data-derived counts and accessible category filters |
+| `/projects` | Eight projects with data-derived counts, ownership and category filters |
 | `/projects/ekavio` | Architecture, tenant boundaries, sessions, RBAC, entitlements, storage and delivery |
 | `/projects/codisify` | E-learning project notes |
 | `/projects/chateph` | Realtime ephemeral messaging project notes |
 | `/projects/afssian` | E-commerce project notes |
+| `/projects/levalor` | LE’VALOR hospitality website: role and employer attribution |
+| `/projects/home-at-paris` | Paris Furnished Apartments LLC website: role and employer attribution |
+| `/projects/bizforz` | Employer corporate website: role and delivery scope |
 | `/contact` | Hiring/project enquiries, email, phone, WhatsApp, LinkedIn and GitHub |
 | `/resume` | Current HTML summary, primary PDF and secondary DOCX downloads |
 
@@ -135,7 +138,11 @@ The supplied updated PDF and DOCX retain their original bytes and clickable cont
 
 ## Adding a project
 
-Add a `Project` object to `src/data/projects.ts` with a unique slug, supported stack and valid repository URL. Add an entry to the icon mapping in `ProjectCard.tsx` and an optional CSS surface variant. Supplying `detail` automatically creates a static detail route and sitemap entry; omitting it leaves a supporting project card. Use a `live` object for an authoritative public URL. Set `verifiedOn` only after a successful reachability check using the actual date; omit it if reachability is unverified. EkaVio uses the label `View staging`; its public site is not approved for real customer data. Afssian's supplied live URL remains available as a link even when its Render host times out. Project filters use the existing categories; expand the category union/list if needed. Keep EkaVio as the sole flagship unless intentionally changing the editorial hierarchy.
+Add a `Project` object to `src/data/projects.ts` with a unique slug and explicit `ownership`. The discriminated union requires professional entries to carry their employer, sector, location and `Professional Project` status, and prevents a GitHub source field on these employer projects. Independent projects retain their existing statuses and optional source links. Supply only verified technology names; an empty stack renders no technology claims. Add an entry to the icon mapping in `ProjectCard.tsx` and an optional CSS surface variant. Supplying `detail` automatically creates a static detail route and sitemap entry; omitting it leaves a supporting project card. Use a `live` object for an authoritative public URL. Set `verifiedOn` only after a successful reachability check using the actual date; omit it if reachability is unverified. EkaVio uses the label `View staging`; its public site is not approved for real customer data. Afssian's supplied live URL remains available as a link even when its Render host times out. Keep EkaVio as the sole flagship.
+
+The current catalogue has exactly three professional websites: LE’VALOR Hotels & Resorts, Home at Paris (Paris Furnished Apartments LLC, Ajman, UAE) and the Bizforz corporate website. All were delivered through employment at Bizforz Solutions Pvt Ltd, with Primary Website Developer attribution. Do not describe them as personal projects or freelance contracts. Broader ERP/product contributions remain collaborative. Institutional website maintenance may be mentioned generically in experience; do not add college cards, links, pages or assets. Professional cards use existing icons and typography, with no new client logos or screenshots. Confirm employer/client permission for publication of named contributions before deployment; keep private implementation details out of the site.
+
+`independentProjects`, `professionalProjects`, detail routes and counts derive from the shared data. `matchesProjectFilter` supports All work, Professional Websites, Independent Projects and the retained technical categories, plus Hospitality and Corporate. The HTML resume keeps its existing independent-project selection; the approved PDF/DOCX remain untouched.
 
 ## Validation
 
@@ -156,9 +163,9 @@ npm run verify:browser
 npm run verify:images
 ```
 
-The scripts default to `http://localhost:3100`; set `QA_BASE_URL` to change it. Browser checks default to the locally installed Windows Chrome path. Set `QA_CHROME_PATH` for another Chromium executable. No browser download is required in the validated environment. `node scripts/verify-browser.mjs --preview` captures both homepage themes at 390, 768 and 1440px. Full QA checks all ten routes in both themes at 360, 390, 430, 768, 1024, 1280 and 1440px (140 checks), saves full-page screenshots at 390/768/1440px, and runs axe at 390/1440px plus both mobile dialogs (42 scans). It verifies keyboard/menu/filter/download/reduced-motion behavior in each theme, then exercises real navbar clicks, root attributes, visible colors, localStorage, OS preference, persistence, metadata, cross-tab synchronization, unavailable storage and saved-theme initialization with hydration deliberately delayed. The image suite checks 56 delivered photos at DPR 1/2, plus mobile DPR 3, and saves retina photo captures. Final evidence goes into ignored `artifacts/master-update/production/`; use `QA_OUTPUT_DIR` to override it. Existing earlier evidence is preserved when present. The prior validation report is archived under `artifacts/master-update/previous-validation-report.md`.
+The scripts default to `http://localhost:3100`; set `QA_BASE_URL` to change it. Browser checks default to the locally installed Windows Chrome path. Set `QA_CHROME_PATH` for another Chromium executable. No browser download is required in the validated environment. `node scripts/verify-browser.mjs --preview` captures both homepage themes at 390, 768 and 1440px. Full QA derives the routes from navigation and project data: currently thirteen routes in both themes at 360, 390, 430, 768, 1024, 1280 and 1440px (182 checks), full-page screenshots at 390/768/1440px, and axe at 390/1440px plus both mobile dialogs (54 scans). It verifies keyboard/menu/filter/download/reduced-motion behavior, professional attribution and source-link exclusion, existing source/demo links, homepage visibility and the sole flagship. It then exercises real navbar clicks, root attributes, visible colors, localStorage, OS preference, persistence, metadata, cross-tab synchronization, unavailable storage and saved-theme initialization with hydration deliberately delayed. The image suite checks 56 delivered photos at DPR 1/2, plus mobile DPR 3, and saves retina photo captures. The default evidence directory remains `artifacts/master-update/production/`; set `QA_OUTPUT_DIR=artifacts/professional-showcase/production` for this update so earlier evidence is preserved. Both directories are ignored. See the separate [showcase report](PROFESSIONAL_SHOWCASE_VALIDATION.md) for measured results.
 
-`verify` checks approved public asset hashes, actual PDF/DOCX download bytes, embedded contact/project links, five project slugs and canonical metadata. If reference folders and `.reference-hashes.json` are present, it also enforces the original reference hash checks. In this clean checkout both are absent, so the report marks that historical audit unavailable rather than claiming 383 files were rechecked.
+`verify` checks approved public asset hashes, actual PDF/DOCX download bytes, embedded contact/project links, all eight project slugs, the five preserved independent source/demo links, the three supplied professional URLs, employer attribution, absence of unavailable employer source links, and canonical metadata. If reference folders and `.reference-hashes.json` are present, it also enforces the original reference hash checks. In this checkout both are absent, so the report marks that historical audit unavailable rather than claiming 383 files were rechecked.
 
 `node scripts/check-external.mjs` performs read-only availability checks against supplied external URLs and records results. Third-party availability can change. HTTP success does not establish backend or authenticated functionality.
 
@@ -176,4 +183,4 @@ Security headers include clickjacking protection, MIME sniffing protection, a re
 
 A future sibling `backend/` can be introduced without moving this application. Keep public editorial content in typed data until there is a concrete CMS need. Isolate future server-side service clients in `src/lib/` and use server components or explicitly authorized handlers for data access. Keep credentials server-side, separate external I/O from presentation and add loading/error states where actual data dependencies appear. No backend folder or speculative API exists in this milestone.
 
-See `VALIDATION_REPORT.md` for exact test results and practical limits.
+See `PROFESSIONAL_SHOWCASE_VALIDATION.md` for this update's exact results and practical limits. `VALIDATION_REPORT.md` preserves the earlier October 6 evidence.

@@ -7,7 +7,7 @@ async function data(name) {
 }
 const { projects } = await data("projects");
 const { profile } = await data("profile");
-const urls = [...new Set([...projects.flatMap((p) => [p.github, ...(p.live ? [p.live.url] : [])]), ...profile.socials.map((s) => s.href)])];
+const urls = [...new Set([...projects.flatMap((p) => [...(p.github ? [p.github] : []), ...(p.live ? [p.live.url] : [])]), ...profile.socials.map((s) => s.href)])];
 const checks = await Promise.all(urls.map(async (url) => {
   try {
     const response = await fetch(url, { signal: AbortSignal.timeout(30000), headers: { "User-Agent": "Afsify-Portfolio-Link-Check" } });
@@ -17,5 +17,5 @@ const checks = await Promise.all(urls.map(async (url) => {
 }));
 const output = process.env.QA_OUTPUT_DIR || "artifacts/master-update";
 await fs.mkdir(output, { recursive: true });
-await fs.writeFile(`${output}/external-links.json`, JSON.stringify({ checkedOn: "2026-10-06", checkedAt: new Date().toISOString(), checks }, null, 2));
+await fs.writeFile(`${output}/external-links.json`, JSON.stringify({ checkedAt: new Date().toISOString(), checks }, null, 2));
 console.log(JSON.stringify(checks, null, 2));

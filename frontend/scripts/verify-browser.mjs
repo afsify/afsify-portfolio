@@ -9,6 +9,14 @@ const base = process.env.QA_BASE_URL || "http://localhost:3100";
 const rootOutput = process.env.QA_OUTPUT_DIR || "artifacts/master-update/production";
 const output = rootOutput;
 await fs.mkdir(output, { recursive: true });
+async function data(name) {
+  const source = await fs.readFile(`src/data/${name}.ts`, "utf8");
+  const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
+  return import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`);
+}
+const { projects, detailedProjects, professionalProjects, independentProjects, projectCategories } = await data("projects");
+const { coreRoutes } = await data("navigation");
+const routes = [...coreRoutes, ...detailedProjects.map((project) => `/projects/${project.slug}`)];
 const chrome = process.env.QA_CHROME_PATH || "C:/Program Files/Google/Chrome/Application/chrome.exe";
 const browser = await chromium.launch({ executablePath: chrome, headless: true });
 const summaries = [];
@@ -44,7 +52,7 @@ try {
     }
   } else if (process.argv.includes("--audit")) {
     const audit = [];
-    for (const route of ["/", "/about", "/experience", "/projects", "/contact", "/resume", "/projects/ekavio", "/projects/codisify", "/projects/chateph", "/projects/afssian"]) {
+    for (const route of routes) {
       await load(route, 390);
       const result = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
       const violations = result.violations.map((item) => ({ id: item.id, nodes: item.nodes.map((node) => ({ target: node.target, summary: node.failureSummary })) }));
@@ -53,10 +61,6 @@ try {
     }
     await fs.writeFile(`${output}/audit.json`, JSON.stringify(audit, null, 2));
   } else {
-    const source = await fs.readFile("src/data/projects.ts", "utf8");
-    const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
-    const { projects, detailedProjects, projectCategories } = await import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`);
-    const routes = ["/", "/about", "/experience", "/projects", "/contact", "/resume", ...detailedProjects.map((project) => `/projects/${project.slug}`)];
     const widths = [360, 390, 430, 768, 1024, 1280, 1440];
     const checks = [];
     const accessibility = [];
@@ -125,11 +129,37 @@ try {
     assert.equal(await page.evaluate(() => document.body.style.overflow), "");
     await load("/projects", 390);
     for (const filter of [...projectCategories.slice(1), "All work"]) {
-      const count = projects.filter((project) => filter === "All work" || project.category === filter).length;
-      await page.getByRole("button", { name: filter, exact: true }).click();
+      const count = filter === "Professional Websites" ? professionalProjects.length : filter === "Independent Projects" ? independentProjects.length : projects.filter((project) => filter === "All work" || project.category === filter).length;
+      const control = page.getByRole("button", { name: filter, exact: true });
+      await control.focus();
+      await page.keyboard.press("Enter");
       assert.equal(await page.locator("#project-results article").count(), count, filter);
-      assert.equal(await page.getByRole("button", { name: filter, exact: true }).getAttribute("aria-pressed"), "true");
+      assert.equal(await control.getAttribute("aria-pressed"), "true");
+      assert((await page.getByRole("status").innerText()).startsWith(`${count} `), "Announced filter count");
+      assert.equal(await page.locator('.project-filter button[aria-pressed="true"]').count(), 1);
+      if (filter === "Professional Websites") {
+        assert.equal(count, 3);
+        assert.equal(await page.locator('#project-results a[href^="https://github.com/"]').count(), 0);
+        assert.equal(await page.locator("#project-results .project-attribution").count(), 3);
+      }
+      if (filter === "Independent Projects") assert.equal(count, 5);
     }
+    for (const project of projects) {
+      const card = page.locator(project.flagship ? ".featured-project" : `.project-${project.slug}`);
+      assert.equal(await card.count(), 1, `One card for ${project.slug}`);
+      assert.equal(await card.locator(`a[href="${project.live.url}"]`).count(), 1);
+      if (project.github) assert.equal(await card.locator(`a[href="${project.github}"]`).count(), 1);
+    }
+    for (const project of professionalProjects) {
+      await load(`/projects/${project.slug}`, 390);
+      assert.equal(await page.locator(`.project-hero a[href="${project.live.url}"]`).count(), 1);
+      assert((await page.locator(".project-facts").innerText()).includes("Primary Website Developer"));
+      assert((await page.locator(".case-attribution").innerText()).includes(project.employer));
+      assert.equal(await page.locator('main a[href^="https://github.com/"]').count(), 0);
+    }
+    await load("/", 390);
+    assert.equal(await page.locator(".professional-websites article").count(), 3);
+    assert.equal(await page.locator(".featured-project").count(), 1, "Sole flagship");
     await page.goto(`${base}/resume`);
     for (const format of ["pdf", "docx"]) {
       const downloadEvent = page.waitForEvent("download");

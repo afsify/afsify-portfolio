@@ -168,6 +168,14 @@ dialog::backdrop { background: var(--overlay); }
 .project-card .tech-stack li, .case-sidebar .tech-stack li { border-color: var(--border); color: var(--text-soft); font-size: .62rem; }
 .project-actions { display: flex; flex-wrap: wrap; gap: 22px; border-top: 1px solid var(--border); margin-top: auto; padding-top: 16px; }
 .project-actions .text-link { font-size: .73rem; }
+.professional-websites { background: var(--surface); }
+.project-attribution { margin-block: 20px 24px; font-size: .78rem; line-height: 1.7; color: var(--text-soft); }
+.project-attribution span { display: block; margin-top: 8px; color: var(--text-muted); }
+.case-attribution p { margin-top: 12px; color: var(--text-soft); font-size: .85rem; }
+.case-attribution .text-link { margin-top: 20px; }
+@media (min-width: 1100px) {
+  .professional-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
 .project-filter { display: flex; flex-wrap: wrap; gap: 8px; }
 .project-filter button { min-height: 44px; padding: 9px 19px; border: 1px solid var(--border-strong); background: transparent; border-radius: 5px; font-size: .78rem; color: var(--text-soft); }
 .project-filter button[aria-pressed="true"] { color: var(--accent-contrast); background: var(--accent-hover); border-color: var(--accent-hover); }

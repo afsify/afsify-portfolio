@@ -2,28 +2,34 @@ export type ProjectCategory =
   | "Full-stack"
   | "Realtime"
   | "E-commerce"
-  | "Dashboard";
+  | "Dashboard"
+  | "Hospitality"
+  | "Corporate";
 export interface ProjectSection {
   title: string;
   body: string;
   points?: readonly string[];
 }
-export interface Project {
+interface ProjectContent {
   slug: string;
   title: string;
   subtitle: string;
   summary: string;
   category: ProjectCategory;
-  status: "Active development" | "Personal project";
   stack: readonly string[];
-  github: string;
+  github?: string;
   live?: { url: string; label?: string; verifiedOn?: string };
   flagship?: boolean;
   detail?: { intro: string; role: string; sections: readonly ProjectSection[] };
 }
+export type Project = ProjectContent & (
+  | { ownership: "independent"; status: "Active development" | "Personal project" }
+  | { ownership: "professional"; status: "Professional Project"; employer: string; sector: string; location: string; github?: never }
+);
 export const projects: readonly Project[] = [
   {
     slug: "ekavio",
+    ownership: "independent",
     title: "EkaVio",
     subtitle: "Multi-Tenant SMB Operations Platform",
     summary:
@@ -99,6 +105,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "codisify",
+    ownership: "independent",
     title: "Codisify Devlearn",
     subtitle: "Learning, connected.",
     summary:
@@ -145,6 +152,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "chateph",
+    ownership: "independent",
     title: "Chateph Messenger",
     subtitle: "Conversations in the moment.",
     summary:
@@ -190,6 +198,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "afssian",
+    ownership: "independent",
     title: "Afssian E-Commerce",
     subtitle: "From catalogue to checkout.",
     summary:
@@ -236,6 +245,7 @@ export const projects: readonly Project[] = [
   },
   {
     slug: "taskent",
+    ownership: "independent",
     title: "Taskent Dashboard",
     subtitle: "A workspace for tasks.",
     summary:
@@ -246,16 +256,98 @@ export const projects: readonly Project[] = [
     github: "https://github.com/afsify/taskent-dashboard",
     live: { url: "https://taskent.vercel.app", verifiedOn: "2026-10-06" },
   },
+  {
+    slug: "levalor",
+    title: "LE’VALOR Hotels & Resorts",
+    subtitle: "Hospitality on the web.",
+    summary: "Primary website development, from client requirements and content coordination to responsive implementation, deployment assistance and ongoing support.",
+    category: "Hospitality",
+    sector: "Hotels & Resorts",
+    location: "Kerala, India · Edappal & Wayanad",
+    ownership: "professional",
+    employer: "Bizforz Solutions Pvt Ltd",
+    status: "Professional Project",
+    stack: [],
+    live: { url: "https://www.levalor.in/", label: "Visit website" },
+    detail: {
+      intro: "A hospitality website for LE’VALOR Hotels & Resorts in Kerala, including Edappal and Wayanad. Delivered through my employment at Bizforz Solutions Pvt Ltd.",
+      role: "Primary Website Developer",
+      sections: [
+        { title: "Business context", body: "A public-facing website for a hotels and resorts business. The implementation work connected client requirements and supplied content with a responsive frontend." },
+        { title: "My responsibilities", body: "I was the primary hands-on website developer and directly handled major parts of the client-facing delivery workflow.", points: ["Direct client communication and requirement discussions", "Collection and coordination of content and required information", "Website frontend implementation and responsive development", "Hosting and deployment assistance", "Ongoing updates, improvements and client support"] },
+        { title: "Delivery and ownership", body: "Delivered through my employment at Bizforz Solutions Pvt Ltd. My work continued beyond implementation through website updates, improvements and client support." },
+      ],
+    },
+  },
+  {
+    slug: "home-at-paris",
+    title: "Home at Paris",
+    subtitle: "A website for a UAE hospitality business.",
+    summary: "Primary website implementation for Paris Furnished Apartments LLC, with direct client communication, responsive frontend work and hosting coordination.",
+    category: "Hospitality",
+    sector: "Furnished Apartments",
+    location: "Ajman, UAE",
+    ownership: "professional",
+    employer: "Bizforz Solutions Pvt Ltd",
+    status: "Professional Project",
+    stack: [],
+    live: { url: "https://www.homeatparis.com/", label: "Visit website" },
+    detail: {
+      intro: "A website for Paris Furnished Apartments LLC in Ajman, UAE. Delivered through Bizforz Solutions Pvt Ltd, with hands-on frontend development and client coordination.",
+      role: "Primary Website Developer",
+      sections: [
+        { title: "Business context", body: "A public website for a UAE-based furnished-apartments business. This project reflects my experience working directly with a business outside India through my employer." },
+        { title: "My responsibilities", body: "I was the primary website developer and worked directly with the client to move requirements and content into the implementation.", points: ["Direct client communication", "Requirement and content collection", "Website implementation and responsive frontend work", "Hosting and deployment coordination", "Subsequent website updates and assistance"] },
+        { title: "Delivery and ownership", body: "Delivered through my employment at Bizforz Solutions Pvt Ltd. I supported hosting and deployment coordination, then subsequent website updates and assistance." },
+      ],
+    },
+  },
+  {
+    slug: "bizforz",
+    title: "Bizforz Solutions Pvt Ltd",
+    subtitle: "The company’s public presence.",
+    summary: "Primary development of my employer’s corporate website, including responsive implementation, content improvements, deployment assistance and maintenance.",
+    category: "Corporate",
+    sector: "Software & Business Solutions",
+    location: "Kerala, India · employment context",
+    ownership: "professional",
+    employer: "Bizforz Solutions Pvt Ltd",
+    status: "Professional Project",
+    stack: [],
+    live: { url: "https://www.bizforz.com/", label: "Visit website" },
+    detail: {
+      intro: "The corporate website for my employer, Bizforz Solutions Pvt Ltd. My primary-development responsibility relates to this website, distinct from my collaborative contributions to the company’s software products.",
+      role: "Primary Website Developer",
+      sections: [
+        { title: "Business context", body: "A public corporate website introducing Bizforz and its software and business-solutions offering. This is my employer’s website, not an external freelance customer project." },
+        { title: "My responsibilities", body: "I was the primary developer for the company website, supporting implementation and ongoing improvements.", points: ["Website implementation and responsive frontend work", "Content coordination and improvements", "Deployment and hosting assistance", "Continuing maintenance and updates as required"] },
+        { title: "Scope and attribution", body: "Delivered for my employer, Bizforz Solutions Pvt Ltd. I was the primary developer of this corporate website; my ERP, CRM and other software work forms part of broader team contributions." },
+      ],
+    },
+  },
 ];
 export const flagshipProject = projects[0];
+export const independentProjects = projects.filter((project) => project.ownership === "independent");
+export const professionalProjects = projects.filter((project) => project.ownership === "professional");
 export const detailedProjects = projects.filter((project) => project.detail);
 export const projectCategories = [
   "All work",
+  "Professional Websites",
+  "Independent Projects",
   "Full-stack",
   "Realtime",
   "E-commerce",
   "Dashboard",
+  "Hospitality",
+  "Corporate",
 ] as const;
+export type ProjectFilter = (typeof projectCategories)[number];
+export function matchesProjectFilter(project: Project, filter: ProjectFilter) {
+  if (filter === "All work") return true;
+  if (filter === "Professional Websites") return project.ownership === "professional";
+  if (filter === "Independent Projects") return project.ownership === "independent";
+  return project.category === filter;
+}
 export function getProject(slug: string) {
   return projects.find((project) => project.slug === slug && project.detail);
 }

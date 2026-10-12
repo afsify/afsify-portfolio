@@ -1,5 +1,7 @@
 # AFSIFY portfolio — October 2026 update and validation
 
+Historical evidence for the **6 October** update is preserved below. The later professional website showcase has separate results in [PROFESSIONAL_SHOWCASE_VALIDATION.md](PROFESSIONAL_SHOWCASE_VALIDATION.md); the earlier ten-route results do not cover the expanded catalogue.
+
 Completed **6 October 2026 (Asia/Calcutta)**. Final browser evidence: **2026-10-06T14:00:55.568Z**. Build ID: **QvOlLJutiro9f1EQNgdg8**. Local production QA URL: **http://localhost:3100**.
 
 The existing portfolio was updated in place for recruiters first and selected freelance enquiries second. The graphite/warm-paper/platinum identity, Manrope typography, page hierarchy, photographs, theme implementation and Webpack development workaround are preserved.

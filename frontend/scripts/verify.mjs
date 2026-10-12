@@ -11,17 +11,39 @@ async function data(file) {
   const compiled = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } }).outputText;
   return import(`data:text/javascript;base64,${Buffer.from(compiled).toString("base64")}`);
 }
-const { projects, detailedProjects } = await data("projects");
+const { projects, detailedProjects, independentProjects, professionalProjects } = await data("projects");
 const { coreRoutes } = await data("navigation");
 const { profile } = await data("profile");
 const routes = [...coreRoutes, ...detailedProjects.map((project) => `/projects/${project.slug}`)];
 assert.equal(new Set(projects.map((project) => project.slug)).size, projects.length);
 assert.equal(projects.filter((project) => project.flagship).length, 1);
 assert.equal(projects[0].slug, "ekavio");
-assert.deepEqual(projects.map((project) => project.slug), ["ekavio", "codisify", "chateph", "afssian", "taskent"]);
+assert.deepEqual(independentProjects.map((project) => project.slug), ["ekavio", "codisify", "chateph", "afssian", "taskent"]);
+assert.deepEqual(professionalProjects.map((project) => project.slug), ["levalor", "home-at-paris", "bizforz"]);
+assert.equal(projects.length, 8, "Exactly five independent and three professional projects");
+const professionalUrls = ["https://www.levalor.in/", "https://www.homeatparis.com/", "https://www.bizforz.com/"];
+assert.deepEqual(professionalProjects.map((project) => project.live.url), professionalUrls);
+for (const project of professionalProjects) {
+  assert.equal(project.employer, "Bizforz Solutions Pvt Ltd");
+  assert.equal(project.status, "Professional Project");
+  assert.equal(project.detail.role, "Primary Website Developer");
+  assert.equal(project.live.label, "Visit website");
+  assert.equal(project.github, undefined, "No unavailable employer source link");
+  assert.equal(project.stack.length, 0, "No unverified employer technology stack");
+  assert(project.sector && project.location);
+}
+assert.deepEqual(independentProjects.map((project) => project.github), [
+  "https://github.com/afsify/ekavio", "https://github.com/afsify/codisify-devlearn",
+  "https://github.com/afsify/chateph-messenger", "https://github.com/afsify/afssian-ecommerce",
+  "https://github.com/afsify/taskent-dashboard",
+]);
+assert.deepEqual(independentProjects.map((project) => project.live.url), [
+  "https://ekavio.afsify.com/", "https://codisify.vercel.app", "https://chateph.vercel.app",
+  "https://afssian.onrender.com/", "https://taskent.vercel.app",
+]);
 assert.equal(projects[0].live.url, "https://ekavio.afsify.com/");
 assert.equal(projects.find((project) => project.slug === "afssian").live.url, "https://afssian.onrender.com/");
-assert(projects.every((project) => project.stack.length));
+assert(independentProjects.every((project) => project.stack.length));
 const sha = (bytes) => crypto.createHash("sha256").update(bytes).digest("hex");
 const approved = JSON.parse(await fs.readFile("scripts/approved-assets.json", "utf8"));
 for (const asset of approved.assets) assert.equal(sha(await fs.readFile(asset.file)), asset.sha256, `Approved asset changed: ${asset.file}`);
@@ -59,6 +81,16 @@ for (const route of routes) {
   const response = await fetch(`${base}${route}`);
   assert.equal(response.status, 200, route);
   const html = await response.text();
+  const professional = professionalProjects.find((project) => route === `/projects/${project.slug}`);
+  if (professional) {
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/)?.[1];
+    assert(main, `${route}: main content`);
+    assert(main.includes("Delivered through Bizforz") && main.includes(professional.employer), `${route}: employer attribution`);
+    assert(main.includes("Primary Website Developer"), `${route}: role`);
+    assert(main.includes(`href="${professional.live.url}"`), `${route}: website action`);
+    assert(!/href="https:\/\/github\.com\//.test(main), `${route}: unavailable source link`);
+    assert(!main.includes("Technology stack"), `${route}: unverified technology stack`);
+  }
   assert.equal((html.match(/<h1\b/g) || []).length, 1, `${route}: one H1`);
   const canonical = html.match(/rel="canonical" href="([^"]+)"/)?.[1];
   assert(canonical, `${route}: canonical missing`);
