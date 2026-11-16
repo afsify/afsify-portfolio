@@ -1,16 +1,16 @@
 {
-  "approvedOn": "2026-10-06",
-  "description": "Supplied updated PDF/DOCX and approved original-resolution photographs. Update only when approved source files change.",
+  "approvedOn": "2026-11-15",
+  "description": "User-selected adaptive PDF/DOCX (diploma pursued; qualification pending). Original photograph approvals preserved.",
   "assets": [
     {
       "file": "public/documents/muhammed-afsal-resume.pdf",
-      "sha256": "46350b92f22160706e11f0145957ecafbc9449ec79748bdab7d76c30288d3010",
-      "bytes": 58176
+      "sha256": "ae4eab117a48213220ab0271a474bdef17f316b5ac1144034d4c429f862f1413",
+      "bytes": 79588
     },
     {
       "file": "public/documents/muhammed-afsal-resume.docx",
-      "sha256": "5cb121d1b986aa11c456a8c899340b7a0fdf77ad5fa66f59eaab3c14bd0ac501",
-      "bytes": 39629
+      "sha256": "72b7bdfef267ed45e679ba85e11c4664d45e9067182affabbcd961a107400d25",
+      "bytes": 39873
     },
     {
       "file": "public/images/profile/muhammed-afsal.webp",

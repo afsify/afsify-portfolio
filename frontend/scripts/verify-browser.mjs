@@ -61,7 +61,7 @@ try {
     }
     await fs.writeFile(`${output}/audit.json`, JSON.stringify(audit, null, 2));
   } else {
-    const widths = [360, 390, 430, 768, 1024, 1280, 1440];
+    const widths = [320, 360, 375, 390, 414, 430, 768, 1024, 1280, 1440];
     const checks = [];
     const accessibility = [];
     for (const width of widths) {
@@ -79,8 +79,8 @@ try {
         assert(state.headingLevels.every((level, index, levels) => index === 0 ? level === 1 : level <= levels[index - 1] + 1), `${route}: skipped heading level`);
         assert.equal(state.brokenImages.length, 0, `${theme} ${route}: broken images ${state.brokenImages.join(", ")}`);
         assert.equal(state.smallTargets, 0, `${route}: small interaction targets`);
-        if ([390, 768, 1440].includes(width)) await page.screenshot({ path: `${output}/${route === "/" ? "home" : route.slice(1).replaceAll("/", "-")}-${width}.png`, fullPage: true });
-        if ([390, 1440].includes(width)) {
+        if ([320, 390, 768, 1440].includes(width)) await page.screenshot({ path: `${output}/${route === "/" ? "home" : route.slice(1).replaceAll("/", "-")}-${width}.png`, fullPage: true });
+        if ([320, 390, 1440].includes(width)) {
           const axe = await new AxeBuilder({ page }).withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"]).analyze();
           accessibility.push({ route, width, violations: axe.violations });
           await fs.writeFile(`${output}/accessibility.json`, JSON.stringify(accessibility, null, 2));
@@ -142,12 +142,14 @@ try {
         assert.equal(await page.locator('#project-results a[href^="https://github.com/"]').count(), 0);
         assert.equal(await page.locator("#project-results .project-attribution").count(), 3);
       }
-      if (filter === "Independent Projects") assert.equal(count, 5);
+      if (filter === "Independent Projects") assert.equal(count, independentProjects.length);
     }
     for (const project of projects) {
       const card = page.locator(project.flagship ? ".featured-project" : `.project-${project.slug}`);
       assert.equal(await card.count(), 1, `One card for ${project.slug}`);
-      assert.equal(await card.locator(`a[href="${project.live.url}"]`).count(), 1);
+      if (project.live) assert.equal(await card.locator(`a[href="${project.live.url}"]`).count(), 1);
+      else assert.equal(await card.getByText("Live demo", { exact: false }).count(), 0);
+      if (!project.detail) assert.equal(await card.getByText("Explore project", { exact: false }).count(), 0);
       if (project.github) assert.equal(await card.locator(`a[href="${project.github}"]`).count(), 1);
     }
     for (const project of professionalProjects) {

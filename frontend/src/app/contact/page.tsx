@@ -2,6 +2,7 @@ import { ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { Container, Eyebrow, ExternalLink, ResumeButton } from "@/components/ui/primitives";
 import { profile } from "@/data/profile";
 import { pageMetadata } from "@/lib/metadata";
+import { ContactForm } from "@/components/contact/ContactForm";
 
 export const metadata = pageMetadata("Contact", "Contact Muhammed Afsal for Frontend / Full-Stack opportunities or selected freelance projects. Email, phone, WhatsApp, LinkedIn and GitHub.", "/contact");
 export default function Contact() {
@@ -12,10 +13,11 @@ export default function Contact() {
       <a href={`mailto:${profile.email}`} className="contact-email"><span>{profile.email}</span><ArrowUpRight size={32} aria-hidden="true" /></a>
       <p className="email-caption"><Mail size={15} aria-hidden="true" />Email is the best place to start.</p>
       <div className="contact-intents">
-        <article><Eyebrow>Hiring conversations</Eyebrow><h2>My next frontend role.</h2><p>Currently a Frontend Developer at Bizforz, open to stronger React, TypeScript and Full-Stack opportunities.</p><a href={profile.hiringEmail} className="text-link">Discuss a role <ArrowUpRight size={18} aria-hidden="true" /></a></article>
-        <article id="project-enquiries"><Eyebrow>Freelance enquiries</Eyebrow><h2>A focused web project.</h2><p>Selected websites, frontend features and improvements, scoped outside my employment commitments. Share the outcome, timeline and existing setup.</p><a href={profile.projectEmail} className="text-link">Discuss a project <ArrowUpRight size={18} aria-hidden="true" /></a></article>
+        <article><Eyebrow>Hiring conversations</Eyebrow><h2>My next engineering role.</h2><p>Currently a Frontend Developer at Bizforz, open to stronger React, TypeScript and Full-Stack opportunities.</p><a href={profile.hiringEmail} className="text-link">Discuss a role <ArrowUpRight size={18} aria-hidden="true" /></a></article>
+        <article id="project-enquiries"><Eyebrow>Freelance enquiries</Eyebrow><h2>A focused web project.</h2><p>Selected websites, React/Next.js and full-stack features, and improvements, scoped outside my employment commitments. Share the outcome, timeline and existing setup.</p><a href={profile.projectEmail} className="text-link">Discuss a project <ArrowUpRight size={18} aria-hidden="true" /></a></article>
       </div>
     </Container></section>
+    <section id="enquiry" className="section"><Container><ContactForm /></Container></section>
     <section className="section light-section"><Container><div className="contact-grid">
       <div><Eyebrow>Direct contact</Eyebrow><h2>Find the work.<br />Meet the person.</h2><div className="contact-location"><MapPin size={19} aria-hidden="true" /><span>{profile.location}<small>{profile.timezone}</small></span></div><ResumeButton className="button button-dark" /></div>
       <div className="contact-socials">

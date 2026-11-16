@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { ArrowUpRight, BookOpen, MessageSquare, ShoppingBag, LayoutDashboard, GitBranch, Building2, House, Hotel } from "lucide-react";
+import { ArrowUpRight, BookOpen, MessageSquare, ShoppingBag, LayoutDashboard, GitBranch, Building2, House, Hotel, CalendarCheck } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { ExternalLink, TechStack } from "@/components/ui/primitives";
 
-const projectIcons = { codisify: BookOpen, chateph: MessageSquare, afssian: ShoppingBag, taskent: LayoutDashboard, ekavio: GitBranch, levalor: Hotel, "home-at-paris": House, bizforz: Building2 };
+const projectIcons = { "boxlist-scheduler": CalendarCheck, codisify: BookOpen, chateph: MessageSquare, afssian: ShoppingBag, taskent: LayoutDashboard, ekavio: GitBranch, levalor: Hotel, "home-at-paris": House, bizforz: Building2 };
 export function ProjectCard({ project, index = 0 }: { project: Project; index?: number }) {
   const Icon = projectIcons[project.slug as keyof typeof projectIcons] ?? GitBranch;
-  return <article className={`project-card project-${project.slug}${project.ownership === "professional" ? " light-section" : ""}`}>
+  return <article id={project.slug} className={`project-card project-${project.slug}${project.ownership === "professional" ? " light-section" : ""}`}>
     <div className="project-card-top"><span className="project-symbol"><Icon size={27} strokeWidth={1.5} aria-hidden="true" /></span><span className="project-index">{String(index + 1).padStart(2, "0")}</span></div>
     <div className="project-meta"><span>{project.ownership === "professional" ? project.sector : project.category}</span><span>{project.status}</span></div>
     <h3>{project.detail ? <Link href={`/projects/${project.slug}`}>{project.title}</Link> : project.title}</h3>

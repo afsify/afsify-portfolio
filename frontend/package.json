@@ -14,7 +14,9 @@
     "verify": "node scripts/verify.mjs",
     "verify:browser": "node scripts/verify-browser.mjs",
     "verify:images": "node scripts/verify-images.mjs",
-    "assets": "node scripts/prepare-assets.mjs"
+    "assets": "node scripts/prepare-assets.mjs",
+    "verify:v2": "node scripts/verify-v2-unit.mjs",
+    "verify:v2:browser": "node scripts/verify-v2-browser.mjs"
   },
   "dependencies": {
     "lucide-react": "1.47.0",
