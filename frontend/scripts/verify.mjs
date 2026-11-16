@@ -18,9 +18,13 @@ const routes = [...coreRoutes, ...detailedProjects.map((project) => `/projects/$
 assert.equal(new Set(projects.map((project) => project.slug)).size, projects.length);
 assert.equal(projects.filter((project) => project.flagship).length, 1);
 assert.equal(projects[0].slug, "ekavio");
-assert.deepEqual(independentProjects.map((project) => project.slug), ["ekavio", "codisify", "chateph", "afssian", "taskent"]);
+assert.deepEqual(independentProjects.map((project) => project.slug), ["ekavio", "boxlist-scheduler", "codisify", "chateph", "afssian", "taskent"]);
 assert.deepEqual(professionalProjects.map((project) => project.slug), ["levalor", "home-at-paris", "bizforz"]);
-assert.equal(projects.length, 8, "Exactly five independent and three professional projects");
+assert.equal(projects.length, independentProjects.length + professionalProjects.length, "Every project has an ownership category");
+const boxlist = projects.find(p => p.slug === "boxlist-scheduler");
+assert.equal(boxlist.category, "Full-stack");
+assert.equal(boxlist.status, "Personal project");
+assert(boxlist.detail && !boxlist.flagship && !boxlist.live, "Source-first Boxlist, with unverified demo omitted");
 const professionalUrls = ["https://www.levalor.in/", "https://www.homeatparis.com/", "https://www.bizforz.com/"];
 assert.deepEqual(professionalProjects.map((project) => project.live.url), professionalUrls);
 for (const project of professionalProjects) {
@@ -33,12 +37,12 @@ for (const project of professionalProjects) {
   assert(project.sector && project.location);
 }
 assert.deepEqual(independentProjects.map((project) => project.github), [
-  "https://github.com/afsify/ekavio", "https://github.com/afsify/codisify-devlearn",
+  "https://github.com/afsify/ekavio", "https://github.com/afsify/boxlist-scheduler", "https://github.com/afsify/codisify-devlearn",
   "https://github.com/afsify/chateph-messenger", "https://github.com/afsify/afssian-ecommerce",
   "https://github.com/afsify/taskent-dashboard",
 ]);
-assert.deepEqual(independentProjects.map((project) => project.live.url), [
-  "https://ekavio.afsify.com/", "https://codisify.vercel.app", "https://chateph.vercel.app",
+assert.deepEqual(independentProjects.map((project) => project.live?.url), [
+  "https://ekavio.afsify.com/", undefined, "https://codisify.vercel.app", "https://chateph.vercel.app",
   "https://afssian.onrender.com/", "https://taskent.vercel.app",
 ]);
 assert.equal(projects[0].live.url, "https://ekavio.afsify.com/");
@@ -77,6 +81,7 @@ assert(publicFiles.filter((file) => /\.(pdf|docx)$/i.test(file)).every((file) =>
 const links = new Set();
 const images = new Set();
 const results = [];
+const titles = new Set(), descriptions = new Set();
 for (const route of routes) {
   const response = await fetch(`${base}${route}`);
   assert.equal(response.status, 200, route);
@@ -96,8 +101,18 @@ for (const route of routes) {
   assert(canonical, `${route}: canonical missing`);
   assert.equal(new URL(canonical).toString(), new URL(route, profile.siteUrl).toString(), `${route}: canonical`);
   assert(/name="description" content="[^"]+"/.test(html), `${route}: description`);
+  const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
+  const description = html.match(/name="description" content="([^"]+)"/)?.[1];
+  assert(title && !titles.has(title), `${route}: unique page title`);
+  assert(!descriptions.has(description), `${route}: unique description`);
+  assert.equal((title.match(/Muhammed Afsal TP/g) || []).length, 1, `${route}: personal name appears once in title`);
+  titles.add(title); descriptions.add(description);
   assert(/property="og:image"/.test(html), `${route}: OG image`);
   assert(/name="twitter:card" content="summary_large_image"/.test(html), `${route}: Twitter`);
+  assert(/rel="icon"[^>]*href="\/favicon\.ico/.test(html), `${route}: ICO metadata`);
+  assert(/rel="icon"[^>]*href="\/icon\.png/.test(html), `${route}: AFS PNG icon metadata`);
+  assert(/rel="apple-touch-icon"[^>]*href="\/apple-icon\.png/.test(html), `${route}: Apple icon metadata`);
+  assert(!/href="\/icon\.svg/.test(html), `${route}: no legacy AF icon metadata`);
   assert(/application\/ld\+json/.test(html), `${route}: Person JSON-LD`);
   const person = JSON.parse(html.match(/<script type="application\/ld\+json">([^<]+)<\/script>/)?.[1] || "null");
   assert.equal(person.url, profile.siteUrl);
@@ -113,7 +128,7 @@ for (const route of routes) {
   assert(themeMetadata.some((tag) => tag.includes('media="(prefers-color-scheme: light)"') && tag.includes('content="#F4F4F1"')), `${route}: light theme metadata`);
   for (const match of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)) if (match[1].startsWith("/") && !match[1].startsWith("//")) links.add(match[1].split("#")[0]);
   for (const match of html.matchAll(/<img\b[^>]*src="([^"]+)"/g)) images.add(match[1].replaceAll("&amp;", "&"));
-  results.push({ route, status: 200, metadata: "pass", h1: "pass" });
+  results.push({ route, status: 200, title, description, canonical, metadata: "pass", h1: "pass" });
 }
 for (const url of [...links, ...images]) {
   const response = await fetch(new URL(url, base));
@@ -127,7 +142,7 @@ assert.equal((sitemap.match(/<url>/g) || []).length, routes.length);
 for (const route of routes) assert(sitemap.includes(`<loc>${new URL(route, profile.siteUrl)}</loc>`));
 const robots = await (await fetch(`${base}/robots.txt`)).text();
 assert(robots.includes(`Sitemap: ${profile.siteUrl}/sitemap.xml`));
-for (const route of ["/icon.svg", "/apple-icon.png", "/images/brand/social-preview.png", ...Object.values(profile.resume)]) assert.equal((await fetch(`${base}${route}`)).status, 200, route);
+for (const route of ["/favicon.ico", "/icon.png", "/apple-icon.png", "/images/brand/social-preview.png", ...Object.values(profile.resume)]) assert.equal((await fetch(`${base}${route}`)).status, 200, route);
 for (const file of Object.values(profile.resume)) {
   const response = await fetch(`${base}${file}`);
   assert.equal(sha(Buffer.from(await response.arrayBuffer())), sha(await fs.readFile(`public${file}`)), `Download bytes: ${file}`);

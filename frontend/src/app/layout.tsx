@@ -10,7 +10,7 @@ import "./globals.css";
 const manrope = localFont({ src: "./fonts/manrope-latin.woff2", variable: "--font-manrope", display: "swap", weight: "200 800" });
 export const metadata: Metadata = {
   metadataBase: new URL(profile.siteUrl),
-  title: { default: "Muhammed Afsal — Frontend Developer & Full Stack Web Developer", template: "%s | Muhammed Afsal" },
+  title: { default: "Muhammed Afsal TP — Full Stack Web Developer", template: "%s | Muhammed Afsal TP" },
   description: profile.summary,
   applicationName: "afsify", authors: [{ name: profile.name, url: profile.siteUrl }],
 };

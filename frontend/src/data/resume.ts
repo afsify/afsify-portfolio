@@ -1,4 +1,4 @@
-// Aligned with the approved October 2026 PDF/DOCX in public/documents.
+// Aligned with the user-selected adaptive PDF/DOCX in public/documents.
 export const resume = {
   strengths: "Strong in REST API integration, Redux Toolkit, production debugging, responsive UI/UX, client requirements, demos and UAT. Full-stack project experience with Node.js, Express.js, PostgreSQL, Docker, Socket.IO, multi-tenant authorization, secure sessions and data migration.",
   flagshipPoints: [

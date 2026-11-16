@@ -1,10 +1,10 @@
 # afsify — Muhammed Afsal
 
-A personal portfolio for Muhammed Afsal, Frontend Developer at Bizforz and Full Stack Web Developer. Thirteen substantive pages present production experience, three employer-delivered websites, five independent projects, the engineering behind EkaVio, selected milestones and direct contact options. Hiring is the primary focus; selected freelance web projects are secondary. Production URL: https://www.afsify.com/.
+A personal portfolio for Muhammed Afsal TP, Full Stack Web Developer with professional Frontend Developer experience at Bizforz. Data-derived pages present production experience, employer-delivered websites, independent projects including Boxlist Scheduler, the engineering behind EkaVio, selected milestones and direct contact options. Hiring is the primary focus; selected freelance web projects are secondary. Production URL: https://www.afsify.com/.
 
 ## Stack
 
-Next.js 16 App Router, React 19, strict TypeScript, Tailwind CSS 4 and Lucide icons. Server components are the default. Client code is limited to navigation, theme controls/observation, project filtering and the error boundary. Manrope is self-hosted through `next/font/local`; the SIL Open Font License is included alongside the font. No third-party analytics, authentication, contact service, database or backend is required.
+Next.js 16 App Router, React 19, strict TypeScript, Tailwind CSS 4 and Lucide icons. Server components are the default. Client code covers navigation, theme controls/observation, project filtering, lazy quick search, PDF view selection, contact interaction and the error boundary. Manrope is self-hosted through `next/font/local`; the SIL Open Font License is included alongside the font. No third-party analytics or authentication is included. The email-app enquiry form, copy fallback and direct email/WhatsApp links work without service credentials; see CONTACT_SETUP.md.
 
 ## Local development
 
@@ -27,16 +27,12 @@ Development uses `next dev --webpack`. In this Windows workspace, Console Ninja 
 | `npm start` | Serve the production build |
 | `npm run lint` | ESLint, zero warnings allowed |
 | `npm run typecheck` | Generate route types and run strict TypeScript |
-| `npm run assets` | Recreate approved photographs, font and AFS artwork; never overwrite resume files |
+| `npm run assets` | Generate missing AFS artwork; preserve existing approved binaries |
 | `npm run verify` | Source/content, HTTP routes, metadata, images, resume and reference-integrity checks |
 | `npm run verify:browser` | Responsive, accessibility and interaction checks in headless Chrome |
 | `npm run verify:images` | Actual delivered photo resolution at mobile, tablet and desktop, including retina displays |
 
-`npm run assets -- --brand-only` regenerates only the social preview, favicon and app icon from the retained AFS mark, leaving photographs, fonts and the resume untouched.
-
-`npm run assets -- --photos-only` regenerates only the four approved photographs directly from their originals.
-
-`assets` is a maintenance command that requires the sibling `ref-files/` source directory. Final assets and fonts are already included, so development, builds and deployment do not read any reference directory.
+`npm run assets` (or `--brand-only`) reads `assets/brand/afsify-logo-original.png` and creates only missing brand outputs. Existing user artwork is never overwritten. `--preview` creates a review set under ignored `artifacts/v2/brand-preview/`. `--photos-only` checks approved photograph hashes without rewriting them. No reference directory is required. Fonts and resumes are outside this generator.
 
 ## Routes
 
@@ -45,18 +41,20 @@ Development uses `next dev --webpack`. In this Windows workspace, Console Ninja 
 | `/` | Identity, flagship engineering work, professional websites, experience, milestones and contact CTA |
 | `/about` | Professional narrative, work principles, technical focus and education |
 | `/experience` | Bizforz contributions, product domains, recognition and separate training history |
-| `/projects` | Eight projects with data-derived counts, ownership and category filters |
+| `/projects` | Project catalogue with data-derived counts, ownership and category filters |
+| `/projects/boxlist-scheduler` | Personal MERN task management, source-verified architecture and honest demo status |
 | `/projects/ekavio` | Architecture, tenant boundaries, sessions, RBAC, entitlements, storage and delivery |
 | `/projects/codisify` | E-learning project notes |
 | `/projects/chateph` | Realtime ephemeral messaging project notes |
 | `/projects/afssian` | E-commerce project notes |
-| `/projects/levalor` | LE’VALOR hospitality website: role and employer attribution |
+| `/projects/levalor` | Le'valor hospitality website: role and employer attribution |
 | `/projects/home-at-paris` | Paris Furnished Apartments LLC website: role and employer attribution |
 | `/projects/bizforz` | Employer corporate website: role and delivery scope |
-| `/contact` | Hiring/project enquiries, email, phone, WhatsApp, LinkedIn and GitHub |
-| `/resume` | Current HTML summary, primary PDF and secondary DOCX downloads |
+| `/services` | Three scoped services, process, requirements and attributable case studies |
+| `/contact` | Hiring/project enquiries, email-app enquiry form, email, phone, WhatsApp, LinkedIn and GitHub |
+| `/resume` | Accessible HTML overview, lazy native PDF preview, PDF and matching DOCX downloads |
 
-The App Router also generates `/sitemap.xml`, `/robots.txt`, `/icon.svg`, `/apple-icon.png`, a custom 404 and a recoverable runtime error view. Unknown project slugs return 404; no empty project pages are generated.
+The App Router also generates `/sitemap.xml`, `/robots.txt`, `/favicon.ico`, `/icon.png`, `/apple-icon.png`, a custom 404 and a recoverable runtime error view. Unknown project slugs return 404; no empty project pages are generated.
 
 ## Structure
 
@@ -85,7 +83,7 @@ frontend/
 
 ## Content and asset strategy
 
-The supplied October 2026 PDF and DOCX in `public/documents/`, the current professional brief, and the current EkaVio repository are authoritative. `scripts/approved-assets.json` records the approved resume and photograph hashes. Earlier reference folders and their hash baseline are absent from this checkout.
+The user-selected adaptive PDF and DOCX in `public/documents/`, the current professional brief, and the current EkaVio repository are authoritative. `scripts/approved-assets.json` records the approved resume and photograph hashes. Earlier reference folders and their hash baseline are absent from this checkout.
 
 - `src/data/profile.ts`: identity, canonical host, centralized phone/E.164/tel/WhatsApp values, hiring/project email links, resume paths, narrative and skills.
 - `experience.ts`, `education.ts`, `recognition.ts`: professional history and photography captions.
@@ -140,7 +138,7 @@ The supplied updated PDF and DOCX retain their original bytes and clickable cont
 
 Add a `Project` object to `src/data/projects.ts` with a unique slug and explicit `ownership`. The discriminated union requires professional entries to carry their employer, sector, location and `Professional Project` status, and prevents a GitHub source field on these employer projects. Independent projects retain their existing statuses and optional source links. Supply only verified technology names; an empty stack renders no technology claims. Add an entry to the icon mapping in `ProjectCard.tsx` and an optional CSS surface variant. Supplying `detail` automatically creates a static detail route and sitemap entry; omitting it leaves a supporting project card. Use a `live` object for an authoritative public URL. Set `verifiedOn` only after a successful reachability check using the actual date; omit it if reachability is unverified. EkaVio uses the label `View staging`; its public site is not approved for real customer data. Afssian's supplied live URL remains available as a link even when its Render host times out. Keep EkaVio as the sole flagship.
 
-The current catalogue has exactly three professional websites: LE’VALOR Hotels & Resorts, Home at Paris (Paris Furnished Apartments LLC, Ajman, UAE) and the Bizforz corporate website. All were delivered through employment at Bizforz Solutions Pvt Ltd, with Primary Website Developer attribution. Do not describe them as personal projects or freelance contracts. Broader ERP/product contributions remain collaborative. Institutional website maintenance may be mentioned generically in experience; do not add college cards, links, pages or assets. Professional cards use existing icons and typography, with no new client logos or screenshots. Confirm employer/client permission for publication of named contributions before deployment; keep private implementation details out of the site.
+The current catalogue has exactly three professional websites: Le'valor Hotels & Resorts, Paris Furnished Apartments LLC, Ajman, UAE and the Bizforz corporate website. All were delivered through employment at Bizforz Solutions Pvt Ltd, with Primary Website Developer attribution. Do not describe them as personal projects or freelance contracts. Broader ERP/product contributions remain collaborative. Institutional website maintenance may be mentioned generically in experience; do not add college cards, links, pages or assets. Professional cards use existing icons and typography, with no new client logos or screenshots. Confirm employer/client permission for publication of named contributions before deployment; keep private implementation details out of the site.
 
 `independentProjects`, `professionalProjects`, detail routes and counts derive from the shared data. `matchesProjectFilter` supports All work, Professional Websites, Independent Projects and the retained technical categories, plus Hospitality and Corporate. The HTML resume keeps its existing independent-project selection; the approved PDF/DOCX remain untouched.
 
@@ -163,24 +161,26 @@ npm run verify:browser
 npm run verify:images
 ```
 
-The scripts default to `http://localhost:3100`; set `QA_BASE_URL` to change it. Browser checks default to the locally installed Windows Chrome path. Set `QA_CHROME_PATH` for another Chromium executable. No browser download is required in the validated environment. `node scripts/verify-browser.mjs --preview` captures both homepage themes at 390, 768 and 1440px. Full QA derives the routes from navigation and project data: currently thirteen routes in both themes at 360, 390, 430, 768, 1024, 1280 and 1440px (182 checks), full-page screenshots at 390/768/1440px, and axe at 390/1440px plus both mobile dialogs (54 scans). It verifies keyboard/menu/filter/download/reduced-motion behavior, professional attribution and source-link exclusion, existing source/demo links, homepage visibility and the sole flagship. It then exercises real navbar clicks, root attributes, visible colors, localStorage, OS preference, persistence, metadata, cross-tab synchronization, unavailable storage and saved-theme initialization with hydration deliberately delayed. The image suite checks 56 delivered photos at DPR 1/2, plus mobile DPR 3, and saves retina photo captures. The default evidence directory remains `artifacts/master-update/production/`; set `QA_OUTPUT_DIR=artifacts/professional-showcase/production` for this update so earlier evidence is preserved. Both directories are ignored. See the separate [showcase report](PROFESSIONAL_SHOWCASE_VALIDATION.md) for measured results.
+The scripts default to `http://localhost:3100`; set `QA_BASE_URL` to change it. Browser checks default to the locally installed Windows Chrome path. Set `QA_CHROME_PATH` for another Chromium executable. No browser download is required in the validated environment. `node scripts/verify-browser.mjs --preview` captures both homepage themes at 390, 768 and 1440px. Full QA derives the routes from navigation and project data: every content route in both themes at 360, 390, 430, 768, 1024, 1280 and 1440px, full-page screenshots at 390/768/1440px, and axe at 390/1440px plus both mobile dialogs (scan counts follow the route catalogue). It verifies keyboard/menu/filter/download/reduced-motion behavior, professional attribution and source-link exclusion, existing source/demo links, homepage visibility and the sole flagship. It then exercises real navbar clicks, root attributes, visible colors, localStorage, OS preference, persistence, metadata, cross-tab synchronization, unavailable storage and saved-theme initialization with hydration deliberately delayed. The image suite checks 56 delivered photos at DPR 1/2, plus mobile DPR 3, and saves retina photo captures. The default evidence directory remains `artifacts/master-update/production/`; set `QA_OUTPUT_DIR=artifacts/v2/production` for this update so earlier evidence is preserved. Both directories are ignored. See the separate [showcase report](PROFESSIONAL_SHOWCASE_VALIDATION.md) for measured results.
 
-`verify` checks approved public asset hashes, actual PDF/DOCX download bytes, embedded contact/project links, all eight project slugs, the five preserved independent source/demo links, the three supplied professional URLs, employer attribution, absence of unavailable employer source links, and canonical metadata. If reference folders and `.reference-hashes.json` are present, it also enforces the original reference hash checks. In this checkout both are absent, so the report marks that historical audit unavailable rather than claiming 383 files were rechecked.
+`verify` checks approved public asset hashes, actual PDF/DOCX download bytes, embedded contact/project links, all project slugs, the preserved independent source/demo links and Boxlist source link, the three supplied professional URLs, employer attribution, absence of unavailable employer source links, and canonical metadata. If reference folders and `.reference-hashes.json` are present, it also enforces the original reference hash checks. In this checkout both are absent, so the report marks that historical audit unavailable rather than claiming 383 files were rechecked.
 
 `node scripts/check-external.mjs` performs read-only availability checks against supplied external URLs and records results. Third-party availability can change. HTTP success does not establish backend or authenticated functionality.
 
 ## Deployment
 
-Deploy as a standard Next.js project with **Root Directory: `frontend`**, install command `npm ci`, and build command `npm run build`. The default production host is `https://www.afsify.com`. On Vercel, use the Next.js preset. No backend, credentials or required environment variables are needed.
+Deploy as a standard Next.js project with **Root Directory: `frontend`**, install command `npm ci`, and build command `npm run build`. The default production host is `https://www.afsify.com`. On Vercel, use the Next.js preset. The portfolio and direct contact links need no credentials. The form opens a prefilled email in the visitor’s app; it does not submit to a server. See CONTACT_SETUP.md.
 
 For a custom domain, set `NEXT_PUBLIC_SITE_URL` to its HTTPS origin before building. This drives canonical URLs, Open Graph, Person JSON-LD, robots and sitemap. Do not set it to a temporary preview URL for a production build. Hosting-level preview protection can keep private previews out of search results.
 
 Keep Next.js image optimization enabled. This is a standard Next.js deployment, not an `output: export` static-folder build. Self-hosting uses `npm ci`, `npm run build`, then `npm start` behind your HTTPS proxy. Production build does not require network font downloads.
 
-Security headers include clickjacking protection, MIME sniffing protection, a restrictive camera/microphone/location policy and a referrer policy. The portfolio uses no cookies; its only localStorage value is the explicit `afsify-theme` preference. Contact details are deliberately public; email, phone and WhatsApp use standard links without a form or new backend. There is no contact submission endpoint; the email link opens the visitor’s mail application.
+Security headers include clickjacking protection, MIME sniffing protection, a restrictive camera/microphone/location policy and a referrer policy. Only `/documents/*` permits same-origin framing for the PDF viewer; other routes retain DENY. Quick search is local and stores no queries. Theme preference is stored locally. The form constructs a local mailto link or copies a plaintext enquiry. It does not submit, log or persist enquiry content. See [CONTACT_SETUP.md](CONTACT_SETUP.md) for browser limitations.
 
-## Future backend
+## V2 verification
 
-A future sibling `backend/` can be introduced without moving this application. Keep public editorial content in typed data until there is a concrete CMS need. Isolate future server-side service clients in `src/lib/` and use server components or explicitly authorized handlers for data access. Keep credentials server-side, separate external I/O from presentation and add loading/error states where actual data dependencies appear. No backend folder or speculative API exists in this milestone.
+Run `npm run verify:v2` for search, email encoding and validation tests, `npm run verify:v2:browser` for search/PDF/fallback browser flows, and `node scripts/verify-contact-browser.mjs` against the same production server for all enquiry types, long-message fallback, clipboard denial/unavailability, accessibility and privacy. Mailto handoffs are captured; no external mail app opens and no message is sent. `python scripts/verify-resume-pair.py` requires pypdf and compares every normalized text character and all links in the selected PDF/DOCX. `node scripts/verify-brand.mjs` compares current assets with the initial audit under `artifacts/v2/`.
 
-See `PROFESSIONAL_SHOWCASE_VALIDATION.md` for this update's exact results and practical limits. `VALIDATION_REPORT.md` preserves the earlier October 6 evidence.
+Earlier verification encountered a Windows Turbopack CSS subprocess failure and used the supported `npm run build -- --webpack` fallback. The November 15 final-polish run passed the default `npm run build` with Turbopack and used that output for browser QA. Keep the Webpack fallback available if the documented local issue recurs; the development workaround remains unchanged.
+
+Current acceptance reports and screenshots are local, ignored review artifacts. Historical validation reports remain historical evidence.

@@ -7,6 +7,7 @@ import { ArrowUpRight, Menu, X } from "lucide-react";
 import { navigation } from "@/data/navigation";
 import { profile } from "@/data/profile";
 import { ThemeToggle } from "./ThemeToggle";
+import { QuickSearch } from "@/components/search/QuickSearch";
 
 function MobileMenu({ onClose, active }: { onClose: () => void; active: (href: string) => boolean }) {
   const dialogRef = useRef<HTMLDialogElement>(null);
@@ -55,7 +56,7 @@ export function Navbar() {
   return <header className="site-header"><div className="container nav-inner">
     <Link href="/" className="wordmark" aria-label="afsify — home">afsify<span>.</span></Link>
     <nav className="desktop-nav" aria-label="Main navigation">{navigation.map((item) => <Link key={item.href} href={item.href} aria-current={active(item.href) ? "page" : undefined}>{item.label}</Link>)}</nav>
-    <div className="nav-actions"><ThemeToggle /><Link href="/resume" className="nav-resume">Resume <ArrowUpRight size={17} aria-hidden="true" /></Link></div>
+    <div className="nav-actions"><QuickSearch /><ThemeToggle /><Link href="/resume" className="nav-resume">Resume <ArrowUpRight size={17} aria-hidden="true" /></Link></div>
     <button type="button" className="icon-button menu-trigger" aria-label="Open menu" aria-expanded={open} aria-controls={open ? "mobile-navigation" : undefined} aria-haspopup="dialog" onClick={() => setOpen(true)}><Menu size={23} /></button>
   </div>{open && <MobileMenu onClose={() => setOpen(false)} active={active} />}</header>;
 }

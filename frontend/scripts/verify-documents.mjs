@@ -30,11 +30,17 @@ export async function verifyDocuments(profile, projects) {
   const relations = zipEntry(docx, "word/_rels/document.xml.rels");
   const content = zipEntry(docx, "word/document.xml");
   const documentText = content.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ");
-  for (const text of ["MUHAMMED AFSAL", "Bizforz", "PostgreSQL", "sole normal runtime data authority", "1.5+ years"]) assert(documentText.includes(text), `Approved resume content: ${text}`);
-  const requiredLinks = [profile.phone.href, `mailto:${profile.email}`, ...profile.socials.slice(0, 2).map((social) => social.href), "https://www.afsify.com/", ...projects.filter((p) => ["ekavio", "afssian"].includes(p.slug)).flatMap((p) => [p.live.url, p.github])];
+  for (const text of ["MUHAMMED AFSAL TP", "Full Stack Web Developer", "Bizforz", "PostgreSQL", "Pursued; qualification pending", "Higher Secondary", "Completed", "1.5+ years"]) assert(documentText.includes(text), `Approved resume content: ${text}`);
+  const requiredLinks = [`mailto:${profile.email}`, ...profile.socials.slice(0, 2).map((social) => social.href), "https://www.afsify.com/", ...projects.filter((p) => ["ekavio", "codisify", "chateph", "afssian"].includes(p.slug)).flatMap((p) => [p.live.url, p.github])];
+  const normalize = (url) => new URL(url).toString();
+  const pdfLinks = new Set([...pdf.toString("latin1").matchAll(/\/URI\s*\(([^)]+)\)/g)].map((match) => normalize(match[1])));
+  const docxLinks = new Set([...relations.matchAll(/Target="((?:https:|mailto:)[^"]+)"/g)].map((match) => normalize(match[1])));
+  assert.deepEqual(pdfLinks, docxLinks, "All selected PDF/DOCX hyperlink destinations agree");
   for (const url of requiredLinks) {
-    assert(relations.includes(`Target="${url}"`), `DOCX link missing: ${url}`);
-    assert(pdf.toString("latin1").includes(`/URI(${url})`), `PDF link missing: ${url}`);
+    assert(docxLinks.has(normalize(url)), `DOCX link missing: ${url}`);
+    assert(pdfLinks.has(normalize(url)), `PDF link missing: ${url}`);
   }
+  assert(documentText.includes("+91 6235448008"), "Selected resume preserves phone text (no tel annotation in supplied PDF)");
+  for (const [format, bytes] of [["pdf", pdf], ["docx", docx]]) assert(bytes.equals(await fs.readFile(`assets/resume/MUHAMMED_AFSAL_TP_RESUME.${format}`)), "Canonical download must match selected nonpublic source");
   return { formats: ["PDF", "DOCX"], requiredLinks, preservedLinks: true };
 }

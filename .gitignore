@@ -38,3 +38,23 @@ Thumbs.db
 ref-*/
 ref-files/
 .reference-hashes.json
+
+# Local implementation instructions and acceptance notes (preserve on disk)
+/AFSIFY_CODE_REFERENCE.md
+/AFSIFY_CODEX_MASTER_PROMPT.md
+/AFSIFY_CODEX_MASTER_PROMPT_V2.md
+/AFSIFY_V2_IMPLEMENTATION_REPORT.md
+/AFSIFY_PRE_PUSH_REPORT.md
+/AFSIFY_V2_MOBILE_RELEASE_MASTER_PROMPT.md
+/AFSIFY_MOBILE_RELEASE_REPORT.md
+
+# Temporary browser/test output and local environment configuration
+**/playwright-report/
+**/test-results/
+**/blob-report/
+**/.cache/
+**/.vercel/
+**/.codex/
+**/.local-backups/
+**/.env*
+!**/.env.example

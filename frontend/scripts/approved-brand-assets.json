@@ -1,0 +1,29 @@
+{
+  "description": "User-supplied AFS brand assets present before V2 implementation. Do not overwrite without a reviewed source update.",
+  "assets": [
+    {
+      "file": "public/images/brand/afs-mark.webp",
+      "sha256": "85bba45064aca59b12e7e4ef8990b5db00210f195836fc14febe7b810d2a7623"
+    },
+    {
+      "file": "public/images/brand/social-preview.png",
+      "sha256": "f97b6d60eb1a4a581597446d23577f12206f8463255a41c0432fd408c339ebf6"
+    },
+    {
+      "file": "src/app/apple-icon.png",
+      "sha256": "a62d8d91779e29a2dd898586d5a7e124cae56307bc1155042531bb5d254acdde"
+    },
+    {
+      "file": "src/app/icon.png",
+      "sha256": "26acc4ca0ff178f86095977560bc3ca45c92520700fb7286114b8fa6b5c137bd"
+    },
+    {
+      "file": "src/app/favicon.ico",
+      "sha256": "38dc4e7072d16eb20e64520c4a8337bdff71f7e44413ab1786e8a082a2b66b05"
+    },
+    {
+      "file": "assets/brand/afsify-logo-original.png",
+      "sha256": "e407f22f550253c160a32a134f844d9aade9907fc34620295c376965768c3ef0"
+    }
+  ]
+}
